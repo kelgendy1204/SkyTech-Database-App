@@ -48,12 +48,6 @@ import root.gui.profitspanel.ProfitsPanel_ViewButtonListener;
 import root.gui.profitspanel.ProfitsSortByListener;
 import root.gui.profitspanel.ProfitsTableModel;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  *
  * @author Khaled
@@ -149,7 +143,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sky Tech");
-        setName("Root User GUI"); // NOI18N
+        setName("Root User GUI");
         
 //////////////////////////////////////////////////////////////////////////////////////////////////
         database.connect();
@@ -880,9 +874,6 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
        
     	
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//    	System.setProperty("user.timezone", DateFormats.getEgyptTimeZone());
-//    	TimeZone.setDefault(null);
-//    	TimeZone.setDefault(TimeZone.getTimeZone("Egypt"));
     	TimeZone.setDefault(TimeZone.getTimeZone("GMT+2:00"));
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -913,16 +904,8 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(RootUserGUIFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
-        /* Create and display the form */
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new RootUserGUIFrame().setVisible(true);
@@ -930,7 +913,6 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private BackUpAndRestore backUpAndRestore;
     private Database database;
     private javax.swing.JMenu FileMenu;
