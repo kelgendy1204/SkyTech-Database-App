@@ -14,8 +14,9 @@ import logic.BackUpAndRestore;
 public class Database {
 	
 	private static final String host = "localhost"; 
+	private static final int port = 3306; 
 	private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-	private static final String DB_URL = "jdbc:mysql://"+ host +":3306/skytech";
+	private static final String DB_URL = "jdbc:mysql://"+ host +":" + port + "/skytech";
 	private static final String user = "root";
 	private static final String password = "114114114114";
 	private Connection con;
