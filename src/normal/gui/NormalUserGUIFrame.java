@@ -9,6 +9,7 @@ import global.gui.ErrorMessage;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -97,7 +98,9 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         buttonGroup = new ButtonGroup();
         DailyOperationPanel_AmountLabel = new javax.swing.JLabel();
         DailyOperationPanel_NotesLabel = new javax.swing.JLabel();
+        DailyOperationPanel_SellerLabel = new javax.swing.JLabel(); 
         DailyOperationPanel_ManualPanel_NotesTextField = new javax.swing.JTextField();
+        DailyOperationPanel_ManualPanel_SellerComboBox = new javax.swing.JComboBox<String>();
         DailyOperationPanel_ManualPanel_AmountTextField = new javax.swing.JTextField();
         DailyOperationPanel_ManualPanel_AddOperationButton = new javax.swing.JButton();
         DailyOperationPanel_DailyOperationTablePanel = new javax.swing.JPanel();
@@ -230,7 +233,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         DailyOperationPanel_ManualPanel.add(DailyOperationPanel_ManualPanel_NotesTextField, gridBagConstraints);
@@ -241,6 +244,21 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         DailyOperationPanel_ManualPanel.add(DailyOperationPanel_ManualPanel_AmountTextField, gridBagConstraints);
 
+        DailyOperationPanel_SellerLabel.setText("Seller :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        DailyOperationPanel_ManualPanel.add(DailyOperationPanel_SellerLabel, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        DailyOperationPanel_ManualPanel.add(DailyOperationPanel_ManualPanel_SellerComboBox, gridBagConstraints);
+        
         DailyOperationPanel_ManualPanel_AddOperationButton.setText("Add operation");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -252,6 +270,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         DailyOperationPanel_ManualPanel_AddOperationButton.setMnemonic(KeyEvent.VK_A);
         
         loadItemComboBox();
+        loadSellerComboBox();
         
         Configurator.enableAutoCompletion(DailyOperationPanel_ManualPanel_ItemsComboBox);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -698,8 +717,38 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
 ///////////////////////////////////////////////////////////////////////////
         
         
-        
     }
+
+	private void loadSellerComboBox() {
+		try {
+			DailyOperationPanel_ManualPanel_SellerComboBox.setModel(new javax.swing.DefaultComboBoxModel<String>(getAllSellers()));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private String[] getAllSellers() throws SQLException {
+		String sql = "SELECT worker_name FROM SkyTech.workers ORDER BY worker_name";
+		
+		Statement statement = database.getCon().createStatement();
+		ResultSet results = statement.executeQuery(sql);
+		
+		ArrayList<String> sellersNames = new ArrayList<String>();
+		
+		while(results.next()){
+			String wokerName = results.getString("worker_name");
+			sellersNames.add(wokerName);
+		}
+		
+		String[] sellerNamesArray = new String[sellersNames.size()];  
+		sellersNames.toArray(sellerNamesArray);
+		
+		results.close();
+		statement.close();
+		
+		return sellerNamesArray;
+		
+	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void loadItemComboBox() {
@@ -721,7 +770,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
 		    });
 		}
 
-    public Item[] getAllItems() throws SQLException{
+    private Item[] getAllItems() throws SQLException{
 		String sql = "SELECT item_id, name, buying_price, amount, category FROM SkyTech.items ORDER BY name";
 		
 		Statement statement = database.getCon().createStatement();
@@ -772,6 +821,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
 				createTitledBorder(null, "Category", javax.swing.border.TitledBorder.CENTER, 
 				javax.swing.border.TitledBorder.ABOVE_TOP, 
 				new java.awt.Font("Tahoma", 1, 12)));
+		
 	}
     
     private void saveToDateNamedFile() {
@@ -860,6 +910,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
     private javax.swing.JPanel DailyOperationPanel_DailyOperationTablePanel;
     private javax.swing.JLabel DailyOperationPanel_ItemLabel;
     private javax.swing.JLabel DailyOperationPanel_AmountLabel;
+    private javax.swing.JLabel DailyOperationPanel_SellerLabel;
     private javax.swing.JPanel DailyOperationPanel_ManualPanel;
     private javax.swing.JButton DailyOperationPanel_ManualPanel_AddOperationButton;
     private javax.swing.JTextField DailyOperationPanel_ManualPanel_AmountTextField;
@@ -868,6 +919,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton DailyOperationPanel_ManualPanel_PaidRadioButton;
     private javax.swing.JRadioButton DailyOperationPanel_ManualPanel_ReturnedRadioButton;
     private javax.swing.JComboBox<Item> DailyOperationPanel_ManualPanel_ItemsComboBox;
+    private javax.swing.JComboBox<String> DailyOperationPanel_ManualPanel_SellerComboBox;
     private javax.swing.JLabel DailyOperationPanel_NotesLabel;
     private Operations_SortByListener operations_SortByListener;
     private Database database;
