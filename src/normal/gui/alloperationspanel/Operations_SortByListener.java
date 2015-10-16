@@ -143,6 +143,16 @@ public class Operations_SortByListener extends MouseAdapter {
 			isIncomeAsc = !isIncomeAsc;
 			
 		}else if (columnName.equals(AllOperationsPanel_AllOperationsTableModel.columnNames[8])) {
+			sortByString = "operations.stored_worker_name";
+
+			if(isNotesAsc) {
+				orderingType = " ASC";
+			} else {
+				orderingType = " DESC";
+			}
+			isNotesAsc = !isNotesAsc;
+			
+		}else if (columnName.equals(AllOperationsPanel_AllOperationsTableModel.columnNames[9])) {
 			sortByString = "operations.notes";
 
 			if(isNotesAsc) {
