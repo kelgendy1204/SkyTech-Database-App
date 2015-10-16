@@ -4,6 +4,7 @@ package normal.gui;
 import global.Category;
 import global.Database;
 import global.Month;
+import global.Worker;
 import global.gui.ErrorMessage;
 
 import java.awt.Color;
@@ -719,29 +720,33 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         
     }
 
+	@SuppressWarnings("rawtypes")
 	private void loadSellerComboBox() {
 		try {
-			DailyOperationPanel_ManualPanel_SellerComboBox.setModel(new javax.swing.DefaultComboBoxModel<String>(getAllSellers()));
+			DailyOperationPanel_ManualPanel_SellerComboBox.setModel(new javax.swing.DefaultComboBoxModel(getAllSellers()));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
+	//////////////////
 	private String[] getAllSellers() throws SQLException {
-		String sql = "SELECT worker_name FROM SkyTech.workers ORDER BY worker_name";
+		String sql = "SELECT worker_id, worker_name FROM SkyTech.workers ORDER BY worker_name";
 		
 		Statement statement = database.getCon().createStatement();
 		ResultSet results = statement.executeQuery(sql);
 		
-		ArrayList<String> sellersNames = new ArrayList<String>();
+		ArrayList<String> workersNames = new ArrayList<String>();
 		
 		while(results.next()){
+			int wokerId = results.getInt("worker_id");
 			String wokerName = results.getString("worker_name");
-			sellersNames.add(wokerName);
+			workersNames.add(wokerName);
+			workersNames.add(wokerName);
 		}
 		
-		String[] sellerNamesArray = new String[sellersNames.size()];  
-		sellersNames.toArray(sellerNamesArray);
+		Worker[] sellerNamesArray = new Worker[workersNames.size()];  
+		workersNames.toArray(sellerNamesArray);
 		
 		results.close();
 		statement.close();
@@ -749,6 +754,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
 		return sellerNamesArray;
 		
 	}
+	/////////////////////////
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void loadItemComboBox() {
@@ -919,7 +925,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton DailyOperationPanel_ManualPanel_PaidRadioButton;
     private javax.swing.JRadioButton DailyOperationPanel_ManualPanel_ReturnedRadioButton;
     private javax.swing.JComboBox<Item> DailyOperationPanel_ManualPanel_ItemsComboBox;
-    private javax.swing.JComboBox<String> DailyOperationPanel_ManualPanel_SellerComboBox;
+    private javax.swing.JComboBox<Worker> DailyOperationPanel_ManualPanel_SellerComboBox;
     private javax.swing.JLabel DailyOperationPanel_NotesLabel;
     private Operations_SortByListener operations_SortByListener;
     private Database database;
