@@ -20,7 +20,7 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 	 * 
 	 */
 	private static final long serialVersionUID = 8631357318018020841L;
-	public static final String[] columnNames = {"ÑŞã ÇáÚãáíÉ" , "ÇáãäÊÌ" , "ÇáßãíÉ" , "ÇáÊÇÑíÎ" , "ÈíÚ" , "ãÑÊÌÚ" , "ÊÇÑíÎ ÇáÊÍÏíË" , "ÇáÏÎá" , "ãáÍæÙÇÊ"};
+	public static final String[] columnNames = {"ÑŞã ÇáÚãáíÉ" , "ÇáãäÊÌ" , "ÇáßãíÉ" , "ÇáÊÇÑíÎ" , "ÈíÚ" , "ãÑÊÌÚ" , "ÊÇÑíÎ ÇáÊÍÏíË" , "ÇáÏÎá" , "ÇáÈÇÆÚ" ,"ãáÍæÙÇÊ"};
 	public ArrayList<Operation> operations;
 	private Database database;
 	private String lastSQL;
