@@ -101,7 +101,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         DailyOperationPanel_NotesLabel = new javax.swing.JLabel();
         DailyOperationPanel_SellerLabel = new javax.swing.JLabel(); 
         DailyOperationPanel_ManualPanel_NotesTextField = new javax.swing.JTextField();
-        DailyOperationPanel_ManualPanel_SellerComboBox = new javax.swing.JComboBox<String>();
+        DailyOperationPanel_ManualPanel_SellerComboBox = new javax.swing.JComboBox<Worker>();
         DailyOperationPanel_ManualPanel_AmountTextField = new javax.swing.JTextField();
         DailyOperationPanel_ManualPanel_AddOperationButton = new javax.swing.JButton();
         DailyOperationPanel_DailyOperationTablePanel = new javax.swing.JPanel();
@@ -720,7 +720,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         
     }
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void loadSellerComboBox() {
 		try {
 			DailyOperationPanel_ManualPanel_SellerComboBox.setModel(new javax.swing.DefaultComboBoxModel(getAllSellers()));
@@ -730,28 +730,27 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
 	}
 
 	//////////////////
-	private String[] getAllSellers() throws SQLException {
+	private Worker[] getAllSellers() throws SQLException {
 		String sql = "SELECT worker_id, worker_name FROM SkyTech.workers ORDER BY worker_name";
 		
 		Statement statement = database.getCon().createStatement();
 		ResultSet results = statement.executeQuery(sql);
 		
-		ArrayList<String> workersNames = new ArrayList<String>();
+		ArrayList<Worker> workersNames = new ArrayList<Worker>();
 		
 		while(results.next()){
 			int wokerId = results.getInt("worker_id");
-			String wokerName = results.getString("worker_name");
-			workersNames.add(wokerName);
-			workersNames.add(wokerName);
+			String storedWorkerName = results.getString("worker_name");
+			workersNames.add(new Worker(wokerId, storedWorkerName));
 		}
 		
-		Worker[] sellerNamesArray = new Worker[workersNames.size()];  
-		workersNames.toArray(sellerNamesArray);
+		Worker[] workersNamesArray = new Worker[workersNames.size()];  
+		workersNames.toArray(workersNamesArray);
 		
 		results.close();
 		statement.close();
 		
-		return sellerNamesArray;
+		return workersNamesArray;
 		
 	}
 	/////////////////////////
