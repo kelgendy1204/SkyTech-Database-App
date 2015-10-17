@@ -64,6 +64,8 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 		case 7:
 			return operations.get(row).getTrueIncome();
 		case 8:
+			return operations.get(row).getStoredWorkerName();
+		case 9:
 			return operations.get(row).getNotes();
 		default:
 			return null;
@@ -85,7 +87,7 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 		default:
 			return super.getColumnClass(column);
 		}
-	}
+	}//begin from here
 	
 	public void loadFromDatabase(int day, Month monthChooser, int year, String search) throws SQLException{
 		StringBuilder filterDate = new StringBuilder();

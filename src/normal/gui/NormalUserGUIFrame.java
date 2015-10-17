@@ -32,6 +32,7 @@ import java.util.TimeZone;
 
 import javax.swing.AbstractAction;
 import javax.swing.ButtonGroup;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -119,6 +120,8 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         AllOperationsPanel_ManualPanel_YearSpinner = new javax.swing.JSpinner();
         AllOperationsPanel_ManualPanel_ViewButton = new javax.swing.JButton();
         AllOperationsPanel_AllOperationsTablePanel = new javax.swing.JPanel();
+        AllOperationsPanel_ManualPanel_SellerLabel = new JLabel();
+        AllOperationPanel_ManualPanel_SellerComboBox = new JComboBox<Worker>();
         ScrollPane2 = new javax.swing.JScrollPane();
         AllOperationsPanel_AllOperationsTable = new javax.swing.JTable();
         allOperationsPanel_AllOperationsTableModel = new AllOperationsPanel_AllOperationsTableModel(database);
@@ -426,6 +429,24 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 15);
         AllOperationsPanel_ManualPanel.add(AllOperationsPanel_ManualPanel_YearSpinner, gridBagConstraints);
 
+        AllOperationsPanel_ManualPanel_SellerLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        AllOperationsPanel_ManualPanel_SellerLabel.setText("Seller  :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 5);
+        AllOperationsPanel_ManualPanel.add(AllOperationsPanel_ManualPanel_SellerLabel, gridBagConstraints);
+        
+        
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 15);
+        AllOperationsPanel_ManualPanel.add(AllOperationPanel_ManualPanel_SellerComboBox, gridBagConstraints);
+        
         AllOperationsPanel_ManualPanel_ViewButton.setText("View");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
@@ -724,6 +745,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
 	private void loadSellerComboBox() {
 		try {
 			DailyOperationPanel_ManualPanel_SellerComboBox.setModel(new javax.swing.DefaultComboBoxModel(getAllSellers()));
+			AllOperationPanel_ManualPanel_SellerComboBox.setModel(new javax.swing.DefaultComboBoxModel(getAllSellers()));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -908,6 +930,8 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
     private javax.swing.JButton AllOperationsPanel_ManualPanel_ViewButton;
     private javax.swing.JLabel AllOperationsPanel_ManualPanel_YearLabel;
     private javax.swing.JSpinner AllOperationsPanel_ManualPanel_YearSpinner;
+    private JLabel AllOperationsPanel_ManualPanel_SellerLabel;
+    private JComboBox<Worker> AllOperationPanel_ManualPanel_SellerComboBox;
     private AllOperationsPanel_ManualPanel_ViewButtonListener allOperationsPanel_ManualPanel_ViewButtonListener;
     private javax.swing.JPanel DailyOperationPanel;
     private javax.swing.JTable DailyOperationPanel_DailyOperationTable;
