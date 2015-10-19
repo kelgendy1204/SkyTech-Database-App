@@ -92,7 +92,7 @@ public class DailyOperationsPanel_DailyOperationsTableModel extends AbstractTabl
 		}
 	}
 	
-	public void loadFromDatabase(String search) throws SQLException{
+	public void loadFromDatabase(String storedWorkerName, String search) throws SQLException{
 		
 		Date date = new Date();
 		Calendar calendar = Calendar.getInstance();
@@ -109,6 +109,11 @@ public class DailyOperationsPanel_DailyOperationsTableModel extends AbstractTabl
 		filterDate.append(year);
 		filterDate.append(" and day(operations.date) = ");
 		filterDate.append(day);
+		
+		if (!(storedWorkerName == null || storedWorkerName.equals(""))) {
+			filterDate.append(" and stored_worker_name = ");
+			filterDate.append("'" + storedWorkerName + "'");
+		}
 		
 		if(!search.equals("")){
 			filterDate.append(" and stored_name like '%");

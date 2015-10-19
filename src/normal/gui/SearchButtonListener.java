@@ -1,6 +1,7 @@
 package normal.gui;
 
 import global.Month;
+import global.Worker;
 import global.gui.ErrorMessage;
 
 import java.awt.Component;
@@ -34,6 +35,8 @@ public class SearchButtonListener implements ActionListener {
 	private JPanel allOperationsPanel_AllOperationsTablePanel;
 	private JPanel DailyOperationPanel_DailyOperationTablePanel;
 	private Component parent;
+	private JComboBox<Worker> AllOperationPanel_ManualPanel_SellerComboBox;
+	private JComboBox<Worker> DailyOperationPanel_ManualPanel_SellerComboBox;
 
 	public SearchButtonListener(Component parent, JTabbedPane TabbedPane, JTextField ToolBar_ItemTextField, 
 			DailyOperationsPanel_DailyOperationsTableModel dailyOperationsPanel_DailyOperationsTableModel,
@@ -42,7 +45,9 @@ public class SearchButtonListener implements ActionListener {
 			JSpinner AllOperationsPanel_ManualPanel_YearSpinner,
 			AllOperationsPanel_AllOperationsTableModel allOperationsPanel_AllOperationsTableModel,
 			JPanel allOperationsPanel_AllOperationsTablePanel,
-			JPanel DailyOperationPanel_DailyOperationTablePanel) {
+			JPanel DailyOperationPanel_DailyOperationTablePanel, 
+			JComboBox<Worker> AllOperationPanel_ManualPanel_SellerComboBox, 
+			JComboBox<Worker> DailyOperationPanel_ManualPanel_SellerComboBox) {
 		this.parent = parent;
 		this.TabbedPane = TabbedPane;
 		this.ToolBar_ItemTextField = ToolBar_ItemTextField;
@@ -53,6 +58,8 @@ public class SearchButtonListener implements ActionListener {
 		this.allOperationsPanel_AllOperationsTableModel = allOperationsPanel_AllOperationsTableModel;
 		this.allOperationsPanel_AllOperationsTablePanel = allOperationsPanel_AllOperationsTablePanel;
 		this.DailyOperationPanel_DailyOperationTablePanel = DailyOperationPanel_DailyOperationTablePanel;
+		this.DailyOperationPanel_ManualPanel_SellerComboBox = DailyOperationPanel_ManualPanel_SellerComboBox;
+		this.AllOperationPanel_ManualPanel_SellerComboBox = AllOperationPanel_ManualPanel_SellerComboBox;
 	}
 
 	@Override
@@ -70,10 +77,12 @@ public class SearchButtonListener implements ActionListener {
 	public void viewAllOperations(String search){
 		Month month = Month.valueOf(AllOperationsPanel_ManualPanel_MonthComboBox.getSelectedItem().toString());
 		int year = (int) AllOperationsPanel_ManualPanel_YearSpinner.getValue();
+		String storedWorkerName = AllOperationPanel_ManualPanel_SellerComboBox.getSelectedItem().toString();
+		
 		changeAllOperationsBorder(year, month);
 
 		try {
-			allOperationsPanel_AllOperationsTableModel.loadFromDatabase(0, month, year, search);
+			allOperationsPanel_AllOperationsTableModel.loadFromDatabase(0, month, year, storedWorkerName, search);
 		} catch (SQLException e) {
 			ErrorMessage.showErrorMessage(parent, e.getMessage());
 			e.printStackTrace();
@@ -94,7 +103,8 @@ public class SearchButtonListener implements ActionListener {
 		switch (TabbedPane.getSelectedIndex()) {
 		case 0:
 			try {
-				dailyOperationsPanel_DailyOperationsTableModel.loadFromDatabase(search);
+				String storedWorkerName = DailyOperationPanel_ManualPanel_SellerComboBox.getSelectedItem().toString();
+				dailyOperationsPanel_DailyOperationsTableModel.loadFromDatabase(storedWorkerName, search);
 			} catch (SQLException e1) {
 				ErrorMessage.showErrorMessage(parent, e1.getMessage());
 				e1.printStackTrace();

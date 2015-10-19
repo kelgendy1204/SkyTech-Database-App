@@ -1,6 +1,7 @@
 package normal.gui.alloperationspanel;
 
 import global.Month;
+import global.Worker;
 import global.gui.ErrorMessage;
 
 import java.awt.Component;
@@ -29,6 +30,7 @@ public class AllOperationsPanel_ManualPanel_ViewButtonListener implements
 	private JSpinner AllOperationsPanel_ManualPanel_YearSpinner;
 	private JPanel allOperationsPanel_AllOperationsTablePanel;
 	private Component parent;
+	private JComboBox<Worker> AllOperationPanel_ManualPanel_SellerComboBox;
 
 	public AllOperationsPanel_ManualPanel_ViewButtonListener(
 			Component parent,
@@ -36,13 +38,15 @@ public class AllOperationsPanel_ManualPanel_ViewButtonListener implements
 			AllOperationsPanel_AllOperationsTableModel allOperationsPanel_AllOperationsTableModel,
 			JComboBox<Month> AllOperationsPanel_ManualPanel_MonthComboBox,
 			JSpinner AllOperationsPanel_ManualPanel_DaySpinner,
-			JSpinner AllOperationsPanel_ManualPanel_YearSpinner) {
+			JSpinner AllOperationsPanel_ManualPanel_YearSpinner,
+			JComboBox<Worker> AllOperationPanel_ManualPanel_SellerComboBox) {
 		this.allOperationsPanel_AllOperationsTablePanel = AllOperationsPanel_AllOperationsTablePanel;
 		this.allOperationsPanel_AllOperationsTableModel = allOperationsPanel_AllOperationsTableModel;
 		this.AllOperationsPanel_ManualPanel_MonthComboBox = AllOperationsPanel_ManualPanel_MonthComboBox;
 		this.AllOperationsPanel_ManualPanel_DaySpinner = AllOperationsPanel_ManualPanel_DaySpinner;
 		this.AllOperationsPanel_ManualPanel_YearSpinner = AllOperationsPanel_ManualPanel_YearSpinner;
 		this.parent = parent;
+		this.AllOperationPanel_ManualPanel_SellerComboBox = AllOperationPanel_ManualPanel_SellerComboBox;
 	}
 
 	@Override
@@ -66,6 +70,8 @@ public class AllOperationsPanel_ManualPanel_ViewButtonListener implements
 		day = (int) AllOperationsPanel_ManualPanel_DaySpinner.getValue();
 		month = Month.valueOf(AllOperationsPanel_ManualPanel_MonthComboBox.getSelectedItem().toString());
 		year = (int) AllOperationsPanel_ManualPanel_YearSpinner.getValue();
+		String storedWorkerName = AllOperationPanel_ManualPanel_SellerComboBox.getSelectedItem().toString();
+		
 		if(day != 0){
 			changeBorder();
 		} else {
@@ -73,7 +79,7 @@ public class AllOperationsPanel_ManualPanel_ViewButtonListener implements
 		}
 		
 		try {
-			allOperationsPanel_AllOperationsTableModel.loadFromDatabase(day, month, year, "");
+			allOperationsPanel_AllOperationsTableModel.loadFromDatabase(day, month, year, storedWorkerName, "");
 		} catch (SQLException e) {
 			ErrorMessage.showErrorMessage(parent, e.getMessage());
 			e.printStackTrace();

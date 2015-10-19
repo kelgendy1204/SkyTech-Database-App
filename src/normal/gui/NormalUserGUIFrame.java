@@ -125,7 +125,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         ScrollPane2 = new javax.swing.JScrollPane();
         AllOperationsPanel_AllOperationsTable = new javax.swing.JTable();
         allOperationsPanel_AllOperationsTableModel = new AllOperationsPanel_AllOperationsTableModel(database);
-        allOperationsPanel_ManualPanel_ViewButtonListener = new AllOperationsPanel_ManualPanel_ViewButtonListener(this, AllOperationsPanel_AllOperationsTablePanel, allOperationsPanel_AllOperationsTableModel, AllOperationsPanel_ManualPanel_MonthComboBox, AllOperationsPanel_ManualPanel_DaySpinner, AllOperationsPanel_ManualPanel_YearSpinner);
+        allOperationsPanel_ManualPanel_ViewButtonListener = new AllOperationsPanel_ManualPanel_ViewButtonListener(this, AllOperationsPanel_AllOperationsTablePanel, allOperationsPanel_AllOperationsTableModel, AllOperationsPanel_ManualPanel_MonthComboBox, AllOperationsPanel_ManualPanel_DaySpinner, AllOperationsPanel_ManualPanel_YearSpinner, AllOperationPanel_ManualPanel_SellerComboBox);
         operations_SortByListener = new Operations_SortByListener(this, TabbedPane, getDailyOperationsPanel_DailyOperationsTableModel(), allOperationsPanel_AllOperationsTableModel, getDailyOperationPanel_DailyOperationTable(), AllOperationsPanel_AllOperationsTable);
         ItemsPanel = new javax.swing.JPanel();
         ItemsPanel_ManualPanel = new javax.swing.JPanel();
@@ -147,7 +147,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         PreferencesMenu = new javax.swing.JMenu();
         PreferencesMenu_SwitchToRootUser = new javax.swing.JMenuItem();
         PreferencesMenu_Refresh = new javax.swing.JMenuItem();
-        searchButtonListener = new SearchButtonListener(this, TabbedPane, ToolBar_ItemTextField, getDailyOperationsPanel_DailyOperationsTableModel(), itemsPanel_ManualPanel_ViewButtonListener, AllOperationsPanel_ManualPanel_MonthComboBox, AllOperationsPanel_ManualPanel_YearSpinner,allOperationsPanel_AllOperationsTableModel, AllOperationsPanel_AllOperationsTablePanel,DailyOperationPanel_DailyOperationTablePanel);
+        searchButtonListener = new SearchButtonListener(this, TabbedPane, ToolBar_ItemTextField, getDailyOperationsPanel_DailyOperationsTableModel(), itemsPanel_ManualPanel_ViewButtonListener, AllOperationsPanel_ManualPanel_MonthComboBox, AllOperationsPanel_ManualPanel_YearSpinner,allOperationsPanel_AllOperationsTableModel, AllOperationsPanel_AllOperationsTablePanel,DailyOperationPanel_DailyOperationTablePanel, AllOperationPanel_ManualPanel_SellerComboBox, DailyOperationPanel_ManualPanel_SellerComboBox);
         dailyOperationsPanel_AddOperationButtonListener = new DailyOperationsPanel_AddOperationButtonListener(this, DailyOperationPanel_ManualPanel_ItemsComboBox, DailyOperationPanel_ManualPanel_AmountTextField, DailyOperationPanel_ManualPanel_PaidRadioButton, DailyOperationPanel_ManualPanel_ReturnedRadioButton, DailyOperationPanel_ManualPanel_NotesTextField, getDailyOperationsPanel_DailyOperationsTableModel(), getDailyOperationPanel_DailyOperationTable(), DailyOperationPanel_ManualPanel_SellerComboBox);
         specialCharacterispatcher = new SpecialCharacterDispatcher(this, TabbedPane, DailyOperationPanel, DailyOperationPanel_ManualPanel_ItemsComboBox);
         
@@ -310,7 +310,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         
 ///////////////////////////////////////////////////////////////////////////////////////////////////////      
         try {
-			getDailyOperationsPanel_DailyOperationsTableModel().loadFromDatabase("");
+			dailyOperationsPanel_DailyOperationsTableModel.loadFromDatabase(null, "");
 		} catch (SQLException e) {
 			ErrorMessage.showErrorMessage(this, e.getMessage());
 			e.printStackTrace();
@@ -826,7 +826,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
 		database.connect();
 		
 		try {
-			getDailyOperationsPanel_DailyOperationsTableModel().loadFromDatabase("");
+			dailyOperationsPanel_DailyOperationsTableModel.loadFromDatabase(null, "");
 		} catch (SQLException e1) {
 			ErrorMessage.showErrorMessage(this, e1.getMessage());
 			e1.printStackTrace();
