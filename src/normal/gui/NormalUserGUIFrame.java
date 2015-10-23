@@ -751,7 +751,6 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
 		}
 	}
 
-	//////////////////
 	private Worker[] getAllSellers() throws SQLException {
 		String sql = "SELECT worker_id, worker_name FROM SkyTech.workers ORDER BY worker_name";
 		
@@ -775,7 +774,6 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
 		return workersNamesArray;
 		
 	}
-	/////////////////////////
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void loadItemComboBox() {

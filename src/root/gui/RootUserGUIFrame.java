@@ -4,6 +4,7 @@ package root.gui;
 import global.Category;
 import global.Database;
 import global.Month;
+import global.Worker;
 import global.gui.ErrorMessage;
 
 import java.awt.Color;
@@ -20,10 +21,16 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
@@ -100,7 +107,9 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         ProfitsPanel_ManualPanel_ViewButton = new javax.swing.JButton();
         ProfitsPanel_ManualPanel_CategoryComboBox = new javax.swing.JComboBox<>();
         ProfitsPanel_ManualPanel_ProfitsLabel = new javax.swing.JLabel();
+        ProfitsPanel_ManualPanel_SellersLabel = new javax.swing.JLabel();
         ProfitsPanel_ManualPanel_ProfitsTextFiled = new javax.swing.JTextField();
+        ProfitsPanel_ManualPanel_SellerComboBox = new JComboBox<Worker>();
         ProfitsPanel_ProfitsTablePanel = new javax.swing.JPanel();
         profitsTableModel = new ProfitsTableModel(database, ProfitsPanel_ManualPanel_ProfitsTextFiled);
         ScrollPane2 = new javax.swing.JScrollPane();
@@ -120,6 +129,8 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         OperationsPanel_ManualPanel_CategoryComboBox = new javax.swing.JComboBox<>();
         OperationsPanel_ManualPanel_IncomeLabel = new javax.swing.JLabel();
         OperationsPanel_ManualPanel_IncomeTextField = new javax.swing.JTextField();
+        OperationsPanel_ManualPanel_SellersLabel = new JLabel();
+        OperationsPanel_ManualPanel_SellerComboBox = new JComboBox<Worker>();
         OperationsPanel_OperationsTablePanel = new javax.swing.JPanel();
         ScrollPane3 = new javax.swing.JScrollPane();
         OperationsPanel_OperationsTable = new javax.swing.JTable();
@@ -344,7 +355,6 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 25;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 7);
         ProfitsPanel_ManualPanel.add(ProfitsPanel_ManualPanel_MonthComboBox, gridBagConstraints);
 
@@ -364,6 +374,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 15);
         ProfitsPanel_ManualPanel.add(ProfitsPanel_ManualPanel_YearSpinner, gridBagConstraints);
 
+        ProfitsPanel_ManualPanel_CategoryLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
         ProfitsPanel_ManualPanel_CategoryLabel.setText("Category :");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
@@ -374,24 +385,44 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
 
         ProfitsPanel_ManualPanel_ViewButton.setText("View");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 20;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 15);
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 15);
         ProfitsPanel_ManualPanel.add(ProfitsPanel_ManualPanel_ViewButton, gridBagConstraints);
 
         ProfitsPanel_ManualPanel_CategoryComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {"all", "electric", "computer", "mobile" , "maintenance" , "other" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 50;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 15);
         ProfitsPanel_ManualPanel.add(ProfitsPanel_ManualPanel_CategoryComboBox, gridBagConstraints);
+        
 
-        ProfitsPanel_ManualPanel_ProfitsLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        ProfitsPanel_ManualPanel_ProfitsLabel.setText("Total profits :");
+        ProfitsPanel_ManualPanel_SellersLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        ProfitsPanel_ManualPanel_SellersLabel.setText("Sellers :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        ProfitsPanel_ManualPanel.add(ProfitsPanel_ManualPanel_SellersLabel, gridBagConstraints);
+        
+        loadSellerComboBox();
+        
+        ProfitsPanel_ManualPanel_SellerComboBox.setPrototypeDisplayValue(new Worker(0, "00000000"));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 15);
+        ProfitsPanel_ManualPanel.add(ProfitsPanel_ManualPanel_SellerComboBox, gridBagConstraints);
+        
+        
+        ProfitsPanel_ManualPanel_ProfitsLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        ProfitsPanel_ManualPanel_ProfitsLabel.setText("Total profits :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 5);
         ProfitsPanel_ManualPanel.add(ProfitsPanel_ManualPanel_ProfitsLabel, gridBagConstraints);
@@ -399,7 +430,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         ProfitsPanel_ManualPanel_ProfitsTextFiled.setEditable(false);
         ProfitsPanel_ManualPanel_ProfitsTextFiled.setText(Double.toString(0));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridx = 13;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 100;
@@ -497,7 +528,6 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 25;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 7);
         OperationsPanel_ManualPanel.add(OperationsPanel_ManualPanel_MonthComboBox, gridBagConstraints);
 
@@ -519,12 +549,13 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
 
         OperationsPanel_ManualPanel_ViewButton.setText("View");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridx = 11;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 20;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 15);
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 15);
         OperationsPanel_ManualPanel.add(OperationsPanel_ManualPanel_ViewButton, gridBagConstraints);
 
+        OperationsPanel_ManualPanel_CategoryLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
         OperationsPanel_ManualPanel_CategoryLabel.setText("Category :");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
@@ -537,14 +568,29 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 50;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 15);
         OperationsPanel_ManualPanel.add(OperationsPanel_ManualPanel_CategoryComboBox, gridBagConstraints);
+        
+        OperationsPanel_ManualPanel_SellersLabel.setFont(new java.awt.Font("Tahoma", 1, 12));
+        OperationsPanel_ManualPanel_SellersLabel.setText("Sellers :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        OperationsPanel_ManualPanel.add(OperationsPanel_ManualPanel_SellersLabel, gridBagConstraints);
+        
+        OperationsPanel_ManualPanel_SellerComboBox.setPrototypeDisplayValue(new Worker(0, "00000000"));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 15);
+        OperationsPanel_ManualPanel.add(OperationsPanel_ManualPanel_SellerComboBox, gridBagConstraints);
 
         OperationsPanel_ManualPanel_IncomeLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         OperationsPanel_ManualPanel_IncomeLabel.setText("Total income :");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 5);
         OperationsPanel_ManualPanel.add(OperationsPanel_ManualPanel_IncomeLabel, gridBagConstraints);
@@ -552,7 +598,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         OperationsPanel_ManualPanel_IncomeTextField.setEditable(false);
         OperationsPanel_ManualPanel_IncomeTextField.setText(Double.toString(0));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridx = 13;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -801,7 +847,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
 ///////////////////////////////////////////////////////////////////////////
         
         
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
     private void addRootItem() {
 		AddEditItemsDialog addEditItemsDialog = new AddEditItemsDialog(RootUserGUIFrame.this, "add", null, 0, rootItemPanelTableModel, ItemsPanel_ItemsTable);
@@ -868,6 +914,41 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
 			ErrorMessage.showErrorMessage(RootUserGUIFrame.this, e.getMessage());
 			e.printStackTrace();
 		}
+	}
+    
+    
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	private void loadSellerComboBox() {
+		try {
+			ProfitsPanel_ManualPanel_SellerComboBox.setModel(new javax.swing.DefaultComboBoxModel(getAllSellers()));
+			OperationsPanel_ManualPanel_SellerComboBox.setModel(new javax.swing.DefaultComboBoxModel(getAllSellers()));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+    
+	private Worker[] getAllSellers() throws SQLException {
+		String sql = "SELECT worker_id, worker_name FROM SkyTech.workers ORDER BY worker_name";
+		
+		Statement statement = database.getCon().createStatement();
+		ResultSet results = statement.executeQuery(sql);
+		
+		ArrayList<Worker> workersNames = new ArrayList<Worker>();
+		
+		while(results.next()){
+			int wokerId = results.getInt("worker_id");
+			String storedWorkerName = results.getString("worker_name");
+			workersNames.add(new Worker(wokerId, storedWorkerName));
+		}
+		
+		Worker[] workersNamesArray = new Worker[workersNames.size()];  
+		workersNames.toArray(workersNamesArray);
+		
+		results.close();
+		statement.close();
+		
+		return workersNamesArray;
+		
 	}
     
     public static void main(String args[]) {
@@ -948,6 +1029,8 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
     private javax.swing.JButton OperationsPanel_ManualPanel_ViewButton;
     private javax.swing.JLabel OperationsPanel_ManualPanel_YearLabel;
     private javax.swing.JSpinner OperationsPanel_ManualPanel_YearSpinner;
+    private JLabel OperationsPanel_ManualPanel_SellersLabel;
+    private JComboBox<Worker> OperationsPanel_ManualPanel_SellerComboBox;
     private javax.swing.JTable OperationsPanel_OperationsTable;
     private RootOperationsTableModel operationsTableModel;
     private javax.swing.JPanel OperationsPanel_OperationsTablePanel;
@@ -965,10 +1048,12 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<Month> ProfitsPanel_ManualPanel_MonthComboBox;
     private javax.swing.JLabel ProfitsPanel_ManualPanel_MonthLabel;
     private javax.swing.JLabel ProfitsPanel_ManualPanel_ProfitsLabel;
+    private JLabel ProfitsPanel_ManualPanel_SellersLabel;
     private javax.swing.JTextField ProfitsPanel_ManualPanel_ProfitsTextFiled;
     private javax.swing.JButton ProfitsPanel_ManualPanel_ViewButton;
     private javax.swing.JLabel ProfitsPanel_ManualPanel_YearLabel;
     private javax.swing.JSpinner ProfitsPanel_ManualPanel_YearSpinner;
+    private JComboBox<Worker> ProfitsPanel_ManualPanel_SellerComboBox;
     private javax.swing.JTable ProfitsPanel_ProfitsTable;
     private javax.swing.JPanel ProfitsPanel_ProfitsTablePanel;
     private ProfitsTableModel profitsTableModel;
