@@ -22,7 +22,7 @@ public class RootOperationsTableModel extends AbstractTableModel {
 	 * 
 	 */
 	private static final long serialVersionUID = -9070121201818075741L;
-	public static final String[] columnNames = {"ÑŞã ÇáÚãáíÉ" , "ÇáãäÊÌ ÇáãÈÇÚ" , "ÇáßãíÉ" , "ÇáÊÇÑíÎ" , "ÈíÚ" , "ãÑÊÌÚ" , "ÊÇÑíÎ ÇáÊÍÏíË" , "ÇáÏÎá" , "ÇáÑÈÍ" , "ãáÍæÙÇÊ"};
+	public static final String[] columnNames = {"ÑŞã ÇáÚãáíÉ" , "ÇáãäÊÌ ÇáãÈÇÚ" , "ÇáßãíÉ" , "ÇáÊÇÑíÎ" , "ÈíÚ" , "ãÑÊÌÚ" , "ÊÇÑíÎ ÇáÊÍÏíË" , "ÇáÏÎá" , "ÇáÑÈÍ" , "ÇáÈÇÆÚ" , "ãáÍæÙÇÊ"};
 	public ArrayList<RootOperation> operations;
 	private Database database;
 	private String lastSQL;
@@ -71,6 +71,8 @@ public class RootOperationsTableModel extends AbstractTableModel {
 		case 8:
 			return operations.get(row).getProfit();
 		case 9:
+			return operations.get(row).getStoredWorkerName();
+		case 10:
 			return operations.get(row).getNotes();
 		default:
 			return null;
@@ -92,7 +94,7 @@ public class RootOperationsTableModel extends AbstractTableModel {
 		default:
 			return super.getColumnClass(column);
 		}
-	}
+	}//begin from here
 	
 	public void loadFromDatabase(int day, Month monthChooser, int year, Category category, String search) throws SQLException{
 		StringBuilder filterDate = new StringBuilder();
