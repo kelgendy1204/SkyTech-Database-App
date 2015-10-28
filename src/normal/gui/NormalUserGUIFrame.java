@@ -823,6 +823,8 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
     public void refresh() {
 		database.connect();
 		
+		loadSellerComboBox();
+		
 		try {
 			dailyOperationsPanel_DailyOperationsTableModel.loadFromDatabase(null, "");
 		} catch (SQLException e1) {

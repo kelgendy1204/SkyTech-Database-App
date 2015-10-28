@@ -70,7 +70,13 @@ public class AllOperationsPanel_ManualPanel_ViewButtonListener implements
 		day = (int) AllOperationsPanel_ManualPanel_DaySpinner.getValue();
 		month = Month.valueOf(AllOperationsPanel_ManualPanel_MonthComboBox.getSelectedItem().toString());
 		year = (int) AllOperationsPanel_ManualPanel_YearSpinner.getValue();
-		String storedWorkerName = AllOperationPanel_ManualPanel_SellerComboBox.getSelectedItem().toString();
+		String storedWorkerName;
+		try {
+			storedWorkerName = AllOperationPanel_ManualPanel_SellerComboBox.getSelectedItem().toString();
+		} catch (java.lang.NullPointerException e1) {
+			storedWorkerName = null;
+			e1.printStackTrace();
+		}
 		
 		if(day != 0){
 			changeBorder();

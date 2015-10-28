@@ -77,7 +77,13 @@ public class SearchButtonListener implements ActionListener {
 	public void viewAllOperations(String search){
 		Month month = Month.valueOf(AllOperationsPanel_ManualPanel_MonthComboBox.getSelectedItem().toString());
 		int year = (int) AllOperationsPanel_ManualPanel_YearSpinner.getValue();
-		String storedWorkerName = AllOperationPanel_ManualPanel_SellerComboBox.getSelectedItem().toString();
+		String storedWorkerName;
+		try {
+			storedWorkerName = AllOperationPanel_ManualPanel_SellerComboBox.getSelectedItem().toString();
+		} catch (java.lang.NullPointerException e1) {
+			storedWorkerName = null;
+			e1.printStackTrace();
+		}
 		
 		changeAllOperationsBorder(year, month);
 
@@ -103,7 +109,13 @@ public class SearchButtonListener implements ActionListener {
 		switch (TabbedPane.getSelectedIndex()) {
 		case 0:
 			try {
-				String storedWorkerName = DailyOperationPanel_ManualPanel_SellerComboBox.getSelectedItem().toString();
+				String storedWorkerName;
+				try {
+					storedWorkerName = DailyOperationPanel_ManualPanel_SellerComboBox.getSelectedItem().toString();
+				} catch (java.lang.NullPointerException e1) {
+					storedWorkerName = null;
+					e1.printStackTrace();
+				}
 				dailyOperationsPanel_DailyOperationsTableModel.loadFromDatabase(storedWorkerName, search);
 			} catch (SQLException e1) {
 				ErrorMessage.showErrorMessage(parent, e1.getMessage());

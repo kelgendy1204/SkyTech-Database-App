@@ -75,7 +75,15 @@ public class OperationsPanel_ViewButtonListener implements ActionListener {
 		month = Month.valueOf(OperationsPanel_ManualPanel_MonthComboBox.getSelectedItem().toString());
 		year = (int) OperationsPanel_ManualPanel_YearSpinner.getValue();
 		category = Category.valueOf(OperationsPanel_ManualPanel_CategoryComboBox.getSelectedItem().toString());
-		String storedWorkerName = OperationsPanel_ManualPanel_SellerComboBox.getSelectedItem().toString();
+		
+		String storedWorkerName;
+		try {
+			storedWorkerName = OperationsPanel_ManualPanel_SellerComboBox.getSelectedItem().toString();
+		} catch (java.lang.NullPointerException e1) {
+			storedWorkerName = null;
+			e1.printStackTrace();
+		}
+		
 		if(day != 0){
 			changeBorder();
 		} else {

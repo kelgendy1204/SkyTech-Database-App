@@ -177,7 +177,7 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 
 		updateStatement.executeUpdate();
 		
-		PreparedStatement selectStatement = database.getCon().prepareStatement("SELECT amount, updated_date, income, TrueIncome(operation_id) true_income, stored_worker_name, notes FROM skytech.operations WHERE operation_id = ?");
+		PreparedStatement selectStatement = database.getCon().prepareStatement("SELECT amount, updated_date, income, TrueIncome(operation_id) true_income, worker_id, stored_worker_name, notes FROM skytech.operations WHERE operation_id = ?");
 		selectStatement.setInt(1, operation.getOperationId());
 		
 		ResultSet results = selectStatement.executeQuery();
@@ -190,6 +190,7 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 		Timestamp updatedDate = results.getTimestamp("updated_date");
 		double income = results.getDouble("income");
 		double trueIncome = results.getDouble("true_income");
+		int workerId = results.getInt("worker_id");
 		String storedWorkerName = results.getString("stored_worker_name");
 		String notes = results.getString("notes");
 		
@@ -198,6 +199,7 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 		operationUpdated.setTrueIncome(trueIncome);
 		operationUpdated.setStoredWorkerName(storedWorkerName);
 		operationUpdated.setNotes(notes);
+		operationUpdated.setWorkerId(workerId);
 		operationUpdated.setUpdatedDate(updatedDate);
 		
 		fireTableRowsUpdated(operationRowNumber, operationRowNumber);

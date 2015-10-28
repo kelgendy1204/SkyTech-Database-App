@@ -229,8 +229,8 @@ public class RootOperationsTableModel extends AbstractTableModel {
 		operationUpdated.setNotes(notes);
 		operationUpdated.setUpdatedDate(updatedDate);
 		operationUpdated.setProfit(profit);
-		operationUpdated.setStoredWorkerName(storedWorkerName);
 		operationUpdated.setWorkerId(workerId);
+		operationUpdated.setStoredWorkerName(storedWorkerName);
 		
 		fireTableRowsUpdated(operationRowNumber, operationRowNumber);
 		

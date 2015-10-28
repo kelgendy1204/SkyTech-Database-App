@@ -80,7 +80,14 @@ public class ProfitsPanel_ViewButtonListener implements ActionListener {
 		month = Month.valueOf(ProfitsPanel_ManualPanel_MonthComboBox.getSelectedItem().toString());
 		year = (int) ProfitsPanel_ManualPanel_YearSpinner.getValue();
 		category = Category.valueOf(ProfitsPanel_ManualPanel_CategoryComboBox.getSelectedItem().toString());
-		String storedWorkerName = ProfitsPanel_ManualPanel_SellerComboBox.getSelectedItem().toString();
+		String storedWorkerName;
+		
+		try {
+			storedWorkerName = ProfitsPanel_ManualPanel_SellerComboBox.getSelectedItem().toString();
+		} catch (java.lang.NullPointerException e1) {
+			storedWorkerName = null;
+			e1.printStackTrace();
+		}
 		
 		if (month == Month.All) {
 			changeBorderNoMonths();

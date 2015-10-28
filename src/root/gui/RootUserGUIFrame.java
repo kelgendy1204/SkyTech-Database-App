@@ -873,6 +873,8 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
     public void refresh() {
 		database.connect();
 		
+		loadSellerComboBox();
+		
 		operationsTableModel.operations.clear();
 		operationsTableModel.setLastSQL(null);
 		OperationsPanel_ManualPanel_IncomeTextField.setText(Double.toString(0));
