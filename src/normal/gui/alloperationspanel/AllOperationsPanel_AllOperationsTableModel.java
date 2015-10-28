@@ -20,7 +20,7 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 	 * 
 	 */
 	private static final long serialVersionUID = 8631357318018020841L;
-	public static final String[] columnNames = {"—ﬁ„ «·⁄„·Ì…" , "«·„‰ Ã" , "«·ﬂ„Ì…" , "«· «—ÌŒ" , "»Ì⁄" , "„— Ã⁄" , " «—ÌŒ «· ÕœÌÀ" , "«·œŒ·" , "„·ÕÊŸ« "};
+	public static final String[] columnNames = {"—ﬁ„ «·⁄„·Ì…" , "«·„‰ Ã" , "«·ﬂ„Ì…" , "«· «—ÌŒ" , "»Ì⁄" , "„— Ã⁄" , " «—ÌŒ «· ÕœÌÀ" , "«·œŒ·" , "«·»«∆⁄" ,"„·ÕÊŸ« "};
 	public ArrayList<Operation> operations;
 	private Database database;
 	private String lastSQL;
@@ -64,6 +64,8 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 		case 7:
 			return operations.get(row).getTrueIncome();
 		case 8:
+			return operations.get(row).getStoredWorkerName();
+		case 9:
 			return operations.get(row).getNotes();
 		default:
 			return null;
@@ -85,9 +87,9 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 		default:
 			return super.getColumnClass(column);
 		}
-	}
+	}//begin from here
 	
-	public void loadFromDatabase(int day, Month monthChooser, int year, String search) throws SQLException{
+	public void loadFromDatabase(int day, Month monthChooser, int year, String storedWorkerName, String search) throws SQLException{
 		StringBuilder filterDate = new StringBuilder();
 		filterDate.append(" Where monthname(operations.date) = ");
 		filterDate.append("'"+ monthChooser +"'");
@@ -103,6 +105,11 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 			break;
 		}
 		
+		if (!(storedWorkerName == null || storedWorkerName.equals(""))) {
+			filterDate.append(" and stored_worker_name = ");
+			filterDate.append("'" + storedWorkerName + "'");
+		} 
+			
 		if(!search.equals("")){
 			filterDate.append(" and stored_name like '%");
 			filterDate.append(search);
@@ -118,7 +125,7 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 	private void sqlSelectStatement(String filterDate) throws SQLException {
 		operations.clear();
 		
-		StringBuilder sql = new StringBuilder("SELECT operation_id , stored_name , operations.amount , operations.date , operations.paid , operations.returned , operations.updated_date , operations.income , TrueIncome(operation_id) true_income , operations.notes From skytech.operations LEFT join skytech.items on items.item_id = operations.item_id");
+		StringBuilder sql = new StringBuilder("SELECT operation_id , stored_name , operations.amount , operations.date , operations.paid , operations.returned , operations.updated_date , operations.income , TrueIncome(operation_id) true_income , operations.worker_id , operations.stored_worker_name , operations.notes From skytech.operations LEFT join skytech.items on items.item_id = operations.item_id");
 		sql.append(filterDate);
 		
 		setLastSQL(sql.toString());
@@ -136,9 +143,11 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 			Timestamp updatedDate = results.getTimestamp("updated_date");
 			double income = results.getDouble("income");
 			double trueIncome = results.getDouble("true_income");
+			int workerId = results.getInt("worker_id");
+			String storedWorkerName = results.getString("stored_worker_name");
 			String notes = results.getString("notes");
 			
-			operations.add(new Operation(operationId, itemSold, date, amount, paid, returned, updatedDate, income, trueIncome, notes));
+			operations.add(new Operation(operationId, itemSold, date, amount, paid, returned, updatedDate, income, trueIncome, workerId, storedWorkerName, notes));
 		}
 		
 		results.close();
@@ -157,17 +166,18 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 	}
 	
 	public void updateOperation(Operation operation, int operationRowNumber) throws SQLException {
-		String sql = ("UPDATE skytech.operations SET amount = ? , income = ? , notes = ? WHERE operation_id = ?" );
+		String sql = ("UPDATE skytech.operations SET amount = ? , income = ? , worker_id = ? , notes = ? WHERE operation_id = ?" );
 		PreparedStatement updateStatement = database.getCon().prepareStatement(sql);
 		
 		updateStatement.setInt(1, operation.getAmount());
 		updateStatement.setDouble(2, operation.getIncome());
-		updateStatement.setString(3, operation.getNotes());
-		updateStatement.setInt(4, operation.getOperationId());
+		updateStatement.setInt(3, operation.getWorkerId());
+		updateStatement.setString(4, operation.getNotes());
+		updateStatement.setInt(5, operation.getOperationId());
 
 		updateStatement.executeUpdate();
 		
-		PreparedStatement selectStatement = database.getCon().prepareStatement("SELECT amount, updated_date, income, TrueIncome(operation_id) true_income, notes FROM skytech.operations WHERE operation_id = ?");
+		PreparedStatement selectStatement = database.getCon().prepareStatement("SELECT amount, updated_date, income, TrueIncome(operation_id) true_income, stored_worker_name, notes FROM skytech.operations WHERE operation_id = ?");
 		selectStatement.setInt(1, operation.getOperationId());
 		
 		ResultSet results = selectStatement.executeQuery();
@@ -180,11 +190,13 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 		Timestamp updatedDate = results.getTimestamp("updated_date");
 		double income = results.getDouble("income");
 		double trueIncome = results.getDouble("true_income");
+		String storedWorkerName = results.getString("stored_worker_name");
 		String notes = results.getString("notes");
 		
 		operationUpdated.setAmount(amount);
 		operationUpdated.setIncome(income);
 		operationUpdated.setTrueIncome(trueIncome);
+		operationUpdated.setStoredWorkerName(storedWorkerName);
 		operationUpdated.setNotes(notes);
 		operationUpdated.setUpdatedDate(updatedDate);
 		
@@ -227,9 +239,11 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 			Timestamp updatedDate = results.getTimestamp("updated_date");
 			double income = results.getDouble("income");
 			double trueIncome = results.getDouble("true_income");
+			int workerId = results.getInt("worker_id");
+			String storedWorkerName = results.getString("stored_worker_name");
 			String notes = results.getString("notes");
 			
-			operations.add(new Operation(operationId, itemSold, date, amount, paid, returned, updatedDate, income, trueIncome, notes));
+			operations.add(new Operation(operationId, itemSold, date, amount, paid, returned, updatedDate, income, trueIncome, workerId, storedWorkerName, notes));
 		}
 		
 		results.close();

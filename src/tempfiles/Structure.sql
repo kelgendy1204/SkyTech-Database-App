@@ -38,7 +38,7 @@ CREATE TABLE `items` (
   PRIMARY KEY (`item_id`),
   UNIQUE KEY `name_UNIQUE` (`name`),
   KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=807 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -100,10 +100,12 @@ CREATE TABLE `operations` (
   `profit` decimal(10,2) DEFAULT NULL,
   `notes` varchar(100) DEFAULT NULL,
   `stored_name` varchar(45) DEFAULT NULL,
+  `worker_id` int(11) DEFAULT NULL,
+  `stored_worker_name` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`operation_id`),
   KEY `item_id` (`item_id`),
   KEY `stored_name` (`stored_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4810 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -126,6 +128,7 @@ begin
 
 
 SET new.stored_name = (SELECT name from items where item_id = new.item_id);
+SET new.stored_worker_name = (SELECT worker_name from workers where workers.worker_id = new.worker_id);
 
 IF new.paid = 1 THEN 
   set new.profit = (new.income - (new.amount * GetSellingPriceFromItems(new.item_id)));
@@ -210,6 +213,21 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `workers`
+--
+
+DROP TABLE IF EXISTS `workers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `workers` (
+  `worker_id` int(11) NOT NULL AUTO_INCREMENT,
+  `worker_name` varchar(45) NOT NULL,
+  PRIMARY KEY (`worker_id`),
+  UNIQUE KEY `workers_name_UNIQUE` (`worker_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping events for database 'skytech'
@@ -318,4 +336,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-05-17 22:40:18
+-- Dump completed on 2015-10-09 22:15:53

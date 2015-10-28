@@ -14,7 +14,7 @@ public class RootOperationsSortByListener extends MouseAdapter {
 	private JTable OperationsPanel_OperationsTable;
 	private RootOperationsTableModel operationsTableModel;
 	private Component parent;
-	private boolean isStoredNameAsc, isAmountAsc, isDateAsc, isPaidAsc, isReturnedAsc, isUpdatedDateAsc, isIncomeAsc, isProfitAsc, isNotesAsc = true;
+	private boolean isStoredWorkerNameAsc, isStoredNameAsc, isAmountAsc, isDateAsc, isPaidAsc, isReturnedAsc, isUpdatedDateAsc, isIncomeAsc, isProfitAsc, isNotesAsc = true;
 	
 	public RootOperationsSortByListener(Component parent, JTable OperationsPanel_OperationsTable,
 	RootOperationsTableModel operationsTableModel) {
@@ -121,6 +121,16 @@ public class RootOperationsSortByListener extends MouseAdapter {
 			isProfitAsc = !isProfitAsc;
 			
 		}else if(columnName.equals(RootOperationsTableModel.columnNames[9])){
+			sortByString = "operations.stored_worker_name";
+
+			if(isStoredWorkerNameAsc) {
+				orderingType = " ASC";
+			} else {
+				orderingType = " DESC";
+			}
+			isStoredWorkerNameAsc = !isStoredWorkerNameAsc;
+			
+		}else if(columnName.equals(RootOperationsTableModel.columnNames[10])){
 			sortByString = "operations.notes";
 
 			if(isNotesAsc) {

@@ -10,9 +10,9 @@ public class RootOperation extends Operation {
 	
 	public RootOperation(int operationId, String itemSold, Timestamp date,
 			int amount, boolean paid, boolean returned, Timestamp updatedDate,
-			double income, double trueIncome, double profit, String notes) {
+			double income, double trueIncome, double profit, int workerId, String storedWorkerName, String notes) {
 		super(operationId, itemSold, date, amount, paid, returned, updatedDate, income, trueIncome,
-				notes);
+				workerId, storedWorkerName, notes);
 		this.profit = profit;
 	}
 

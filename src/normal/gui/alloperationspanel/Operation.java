@@ -12,10 +12,12 @@ public class Operation {
 	protected Timestamp updatedDate;
 	protected double income;
 	protected double trueIncome;
+	protected int workerId; 
+	protected String storedWorkerName;
 	protected String notes;
 
 	public Operation(int operationId, String itemSold, Timestamp date, int amount, boolean paid,
-			boolean returned, Timestamp updatedDate, double income, double trueIncome, String notes) {
+			boolean returned, Timestamp updatedDate, double income, double trueIncome, int workerId, String storedWorkerName, String notes) {
 		this.operationId = operationId;
 		this.itemSold = itemSold;
 		this.amount = amount;
@@ -26,6 +28,8 @@ public class Operation {
 		this.income = income;
 		this.notes = notes;
 		this.trueIncome = trueIncome;
+		this.workerId = workerId;
+		this.storedWorkerName = storedWorkerName;
 	}
 
 	public String getItemSold() {
@@ -106,6 +110,22 @@ public class Operation {
 
 	public void setTrueIncome(double trueIncome) {
 		this.trueIncome = trueIncome;
+	}
+	
+	public void setStoredWorkerName(String storedWorkerName) {
+		this.storedWorkerName = storedWorkerName;
+	}
+	
+	public String getStoredWorkerName() {
+		return storedWorkerName;
+	}
+	
+	public void setWorkerId(int workerId) {
+		this.workerId = workerId;
+	}
+	
+	public int getWorkerId() {
+		return workerId;
 	}
 	
 }

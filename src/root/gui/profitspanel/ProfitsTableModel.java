@@ -64,7 +64,7 @@ public class ProfitsTableModel extends AbstractTableModel {
 		return columnNames[column];
 	}
 	
-	public void loadFromDatabase(int day, Month monthChooser, int year, Category category, String search) throws SQLException{
+	public void loadFromDatabase(int day, Month monthChooser, int year, Category category, String storedWorkerName, String search) throws SQLException{
 		StringBuilder filterDate = new StringBuilder();
 		filterDate.append(" Where year(operations.date) = ");
 		filterDate.append(year);
@@ -91,6 +91,11 @@ public class ProfitsTableModel extends AbstractTableModel {
 			filterDate.append(" and items.category = '");
 			filterDate.append(category);
 			filterDate.append("'");
+		}
+		
+		if (!(storedWorkerName == null || storedWorkerName.equals(""))) {
+			filterDate.append(" and stored_worker_name = ");
+			filterDate.append("'" + storedWorkerName + "'");
 		}
 		
 		if(!search.equals("")){

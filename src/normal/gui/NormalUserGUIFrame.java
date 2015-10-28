@@ -4,11 +4,13 @@ package normal.gui;
 import global.Category;
 import global.Database;
 import global.Month;
+import global.Worker;
 import global.gui.ErrorMessage;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
 import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -30,6 +32,7 @@ import java.util.TimeZone;
 
 import javax.swing.AbstractAction;
 import javax.swing.ButtonGroup;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -97,7 +100,9 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         buttonGroup = new ButtonGroup();
         DailyOperationPanel_AmountLabel = new javax.swing.JLabel();
         DailyOperationPanel_NotesLabel = new javax.swing.JLabel();
+        DailyOperationPanel_SellerLabel = new javax.swing.JLabel(); 
         DailyOperationPanel_ManualPanel_NotesTextField = new javax.swing.JTextField();
+        DailyOperationPanel_ManualPanel_SellerComboBox = new javax.swing.JComboBox<Worker>();
         DailyOperationPanel_ManualPanel_AmountTextField = new javax.swing.JTextField();
         DailyOperationPanel_ManualPanel_AddOperationButton = new javax.swing.JButton();
         DailyOperationPanel_DailyOperationTablePanel = new javax.swing.JPanel();
@@ -115,10 +120,12 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         AllOperationsPanel_ManualPanel_YearSpinner = new javax.swing.JSpinner();
         AllOperationsPanel_ManualPanel_ViewButton = new javax.swing.JButton();
         AllOperationsPanel_AllOperationsTablePanel = new javax.swing.JPanel();
+        AllOperationsPanel_ManualPanel_SellerLabel = new JLabel();
+        AllOperationPanel_ManualPanel_SellerComboBox = new JComboBox<Worker>();
         ScrollPane2 = new javax.swing.JScrollPane();
         AllOperationsPanel_AllOperationsTable = new javax.swing.JTable();
         allOperationsPanel_AllOperationsTableModel = new AllOperationsPanel_AllOperationsTableModel(database);
-        allOperationsPanel_ManualPanel_ViewButtonListener = new AllOperationsPanel_ManualPanel_ViewButtonListener(this, AllOperationsPanel_AllOperationsTablePanel, allOperationsPanel_AllOperationsTableModel, AllOperationsPanel_ManualPanel_MonthComboBox, AllOperationsPanel_ManualPanel_DaySpinner, AllOperationsPanel_ManualPanel_YearSpinner);
+        allOperationsPanel_ManualPanel_ViewButtonListener = new AllOperationsPanel_ManualPanel_ViewButtonListener(this, AllOperationsPanel_AllOperationsTablePanel, allOperationsPanel_AllOperationsTableModel, AllOperationsPanel_ManualPanel_MonthComboBox, AllOperationsPanel_ManualPanel_DaySpinner, AllOperationsPanel_ManualPanel_YearSpinner, AllOperationPanel_ManualPanel_SellerComboBox);
         operations_SortByListener = new Operations_SortByListener(this, TabbedPane, getDailyOperationsPanel_DailyOperationsTableModel(), allOperationsPanel_AllOperationsTableModel, getDailyOperationPanel_DailyOperationTable(), AllOperationsPanel_AllOperationsTable);
         ItemsPanel = new javax.swing.JPanel();
         ItemsPanel_ManualPanel = new javax.swing.JPanel();
@@ -140,8 +147,8 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         PreferencesMenu = new javax.swing.JMenu();
         PreferencesMenu_SwitchToRootUser = new javax.swing.JMenuItem();
         PreferencesMenu_Refresh = new javax.swing.JMenuItem();
-        searchButtonListener = new SearchButtonListener(this, TabbedPane, ToolBar_ItemTextField, getDailyOperationsPanel_DailyOperationsTableModel(), itemsPanel_ManualPanel_ViewButtonListener, AllOperationsPanel_ManualPanel_MonthComboBox, AllOperationsPanel_ManualPanel_YearSpinner,allOperationsPanel_AllOperationsTableModel, AllOperationsPanel_AllOperationsTablePanel,DailyOperationPanel_DailyOperationTablePanel);
-        dailyOperationsPanel_AddOperationButtonListener = new DailyOperationsPanel_AddOperationButtonListener(this, DailyOperationPanel_ManualPanel_ItemsComboBox, DailyOperationPanel_ManualPanel_AmountTextField, DailyOperationPanel_ManualPanel_PaidRadioButton, DailyOperationPanel_ManualPanel_ReturnedRadioButton, DailyOperationPanel_ManualPanel_NotesTextField, getDailyOperationsPanel_DailyOperationsTableModel(), getDailyOperationPanel_DailyOperationTable());
+        searchButtonListener = new SearchButtonListener(this, TabbedPane, ToolBar_ItemTextField, getDailyOperationsPanel_DailyOperationsTableModel(), itemsPanel_ManualPanel_ViewButtonListener, AllOperationsPanel_ManualPanel_MonthComboBox, AllOperationsPanel_ManualPanel_YearSpinner,allOperationsPanel_AllOperationsTableModel, AllOperationsPanel_AllOperationsTablePanel,DailyOperationPanel_DailyOperationTablePanel, AllOperationPanel_ManualPanel_SellerComboBox, DailyOperationPanel_ManualPanel_SellerComboBox);
+        dailyOperationsPanel_AddOperationButtonListener = new DailyOperationsPanel_AddOperationButtonListener(this, DailyOperationPanel_ManualPanel_ItemsComboBox, DailyOperationPanel_ManualPanel_AmountTextField, DailyOperationPanel_ManualPanel_PaidRadioButton, DailyOperationPanel_ManualPanel_ReturnedRadioButton, DailyOperationPanel_ManualPanel_NotesTextField, getDailyOperationsPanel_DailyOperationsTableModel(), getDailyOperationPanel_DailyOperationTable(), DailyOperationPanel_ManualPanel_SellerComboBox);
         specialCharacterispatcher = new SpecialCharacterDispatcher(this, TabbedPane, DailyOperationPanel, DailyOperationPanel_ManualPanel_ItemsComboBox);
         
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -230,7 +237,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         DailyOperationPanel_ManualPanel.add(DailyOperationPanel_ManualPanel_NotesTextField, gridBagConstraints);
@@ -241,6 +248,21 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         DailyOperationPanel_ManualPanel.add(DailyOperationPanel_ManualPanel_AmountTextField, gridBagConstraints);
 
+        DailyOperationPanel_SellerLabel.setText("Seller :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        DailyOperationPanel_ManualPanel.add(DailyOperationPanel_SellerLabel, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        DailyOperationPanel_ManualPanel.add(DailyOperationPanel_ManualPanel_SellerComboBox, gridBagConstraints);
+        
         DailyOperationPanel_ManualPanel_AddOperationButton.setText("Add operation");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -252,6 +274,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         DailyOperationPanel_ManualPanel_AddOperationButton.setMnemonic(KeyEvent.VK_A);
         
         loadItemComboBox();
+        loadSellerComboBox();
         
         Configurator.enableAutoCompletion(DailyOperationPanel_ManualPanel_ItemsComboBox);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -287,7 +310,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         
 ///////////////////////////////////////////////////////////////////////////////////////////////////////      
         try {
-			getDailyOperationsPanel_DailyOperationsTableModel().loadFromDatabase("");
+			dailyOperationsPanel_DailyOperationsTableModel.loadFromDatabase(null, "");
 		} catch (SQLException e) {
 			ErrorMessage.showErrorMessage(this, e.getMessage());
 			e.printStackTrace();
@@ -406,6 +429,24 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 15);
         AllOperationsPanel_ManualPanel.add(AllOperationsPanel_ManualPanel_YearSpinner, gridBagConstraints);
 
+        AllOperationsPanel_ManualPanel_SellerLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        AllOperationsPanel_ManualPanel_SellerLabel.setText("Seller  :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 5);
+        AllOperationsPanel_ManualPanel.add(AllOperationsPanel_ManualPanel_SellerLabel, gridBagConstraints);
+        
+        
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 15);
+        AllOperationsPanel_ManualPanel.add(AllOperationPanel_ManualPanel_SellerComboBox, gridBagConstraints);
+        
         AllOperationsPanel_ManualPanel_ViewButton.setText("View");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
@@ -698,8 +739,41 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
 ///////////////////////////////////////////////////////////////////////////
         
         
-        
     }
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void loadSellerComboBox() {
+		try {
+			DailyOperationPanel_ManualPanel_SellerComboBox.setModel(new javax.swing.DefaultComboBoxModel(getAllSellers()));
+			AllOperationPanel_ManualPanel_SellerComboBox.setModel(new javax.swing.DefaultComboBoxModel(getAllSellers()));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private Worker[] getAllSellers() throws SQLException {
+		String sql = "SELECT worker_id, worker_name FROM SkyTech.workers ORDER BY worker_name";
+		
+		Statement statement = database.getCon().createStatement();
+		ResultSet results = statement.executeQuery(sql);
+		
+		ArrayList<Worker> workersNames = new ArrayList<Worker>();
+		
+		while(results.next()){
+			int wokerId = results.getInt("worker_id");
+			String storedWorkerName = results.getString("worker_name");
+			workersNames.add(new Worker(wokerId, storedWorkerName));
+		}
+		
+		Worker[] workersNamesArray = new Worker[workersNames.size()];  
+		workersNames.toArray(workersNamesArray);
+		
+		results.close();
+		statement.close();
+		
+		return workersNamesArray;
+		
+	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void loadItemComboBox() {
@@ -721,7 +795,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
 		    });
 		}
 
-    public Item[] getAllItems() throws SQLException{
+    private Item[] getAllItems() throws SQLException{
 		String sql = "SELECT item_id, name, buying_price, amount, category FROM SkyTech.items ORDER BY name";
 		
 		Statement statement = database.getCon().createStatement();
@@ -750,7 +824,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
 		database.connect();
 		
 		try {
-			getDailyOperationsPanel_DailyOperationsTableModel().loadFromDatabase("");
+			dailyOperationsPanel_DailyOperationsTableModel.loadFromDatabase(null, "");
 		} catch (SQLException e1) {
 			ErrorMessage.showErrorMessage(this, e1.getMessage());
 			e1.printStackTrace();
@@ -772,6 +846,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
 				createTitledBorder(null, "Category", javax.swing.border.TitledBorder.CENTER, 
 				javax.swing.border.TitledBorder.ABOVE_TOP, 
 				new java.awt.Font("Tahoma", 1, 12)));
+		
 	}
     
     private void saveToDateNamedFile() {
@@ -853,6 +928,8 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
     private javax.swing.JButton AllOperationsPanel_ManualPanel_ViewButton;
     private javax.swing.JLabel AllOperationsPanel_ManualPanel_YearLabel;
     private javax.swing.JSpinner AllOperationsPanel_ManualPanel_YearSpinner;
+    private JLabel AllOperationsPanel_ManualPanel_SellerLabel;
+    private JComboBox<Worker> AllOperationPanel_ManualPanel_SellerComboBox;
     private AllOperationsPanel_ManualPanel_ViewButtonListener allOperationsPanel_ManualPanel_ViewButtonListener;
     private javax.swing.JPanel DailyOperationPanel;
     private javax.swing.JTable DailyOperationPanel_DailyOperationTable;
@@ -860,6 +937,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
     private javax.swing.JPanel DailyOperationPanel_DailyOperationTablePanel;
     private javax.swing.JLabel DailyOperationPanel_ItemLabel;
     private javax.swing.JLabel DailyOperationPanel_AmountLabel;
+    private javax.swing.JLabel DailyOperationPanel_SellerLabel;
     private javax.swing.JPanel DailyOperationPanel_ManualPanel;
     private javax.swing.JButton DailyOperationPanel_ManualPanel_AddOperationButton;
     private javax.swing.JTextField DailyOperationPanel_ManualPanel_AmountTextField;
@@ -868,6 +946,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton DailyOperationPanel_ManualPanel_PaidRadioButton;
     private javax.swing.JRadioButton DailyOperationPanel_ManualPanel_ReturnedRadioButton;
     private javax.swing.JComboBox<Item> DailyOperationPanel_ManualPanel_ItemsComboBox;
+    private javax.swing.JComboBox<Worker> DailyOperationPanel_ManualPanel_SellerComboBox;
     private javax.swing.JLabel DailyOperationPanel_NotesLabel;
     private Operations_SortByListener operations_SortByListener;
     private Database database;

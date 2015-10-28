@@ -19,7 +19,7 @@ public class Operations_SortByListener extends MouseAdapter {
 	private DailyOperationsPanel_DailyOperationsTableModel dailyOperationsPanel_DailyOperationsTableModel;
 	private AllOperationsPanel_AllOperationsTableModel allOperationsPanel_AllOperationsTableModel;
 	private Component parent;
-	private boolean isStoredNameAsc, isAmountAsc, isDateAsc, isPaidAsc, isReturnedAsc, isUpdatedDateAsc, isIncomeAsc, isNotesAsc = true;
+	private boolean isStoredWorkerNameAsc, isStoredNameAsc, isAmountAsc, isDateAsc, isPaidAsc, isReturnedAsc, isUpdatedDateAsc, isIncomeAsc, isNotesAsc = true;
 	
 	public Operations_SortByListener(
 			Component parent, JTabbedPane tappedPane,
@@ -143,6 +143,16 @@ public class Operations_SortByListener extends MouseAdapter {
 			isIncomeAsc = !isIncomeAsc;
 			
 		}else if (columnName.equals(AllOperationsPanel_AllOperationsTableModel.columnNames[8])) {
+			sortByString = "operations.stored_worker_name";
+
+			if(isStoredWorkerNameAsc) {
+				orderingType = " ASC";
+			} else {
+				orderingType = " DESC";
+			}
+			isStoredWorkerNameAsc = !isStoredWorkerNameAsc;
+			
+		}else if (columnName.equals(AllOperationsPanel_AllOperationsTableModel.columnNames[9])) {
 			sortByString = "operations.notes";
 
 			if(isNotesAsc) {

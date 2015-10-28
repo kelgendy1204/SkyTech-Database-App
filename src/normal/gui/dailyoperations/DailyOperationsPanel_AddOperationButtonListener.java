@@ -1,5 +1,6 @@
 package normal.gui.dailyoperations;
 
+import global.Worker;
 import global.gui.ErrorMessage;
 
 import java.awt.Component;
@@ -23,6 +24,7 @@ public class DailyOperationsPanel_AddOperationButtonListener implements
 	private JTextField DailyOperationPanel_ManualPanel_NotesTextField;
 	private JRadioButton DailyOperationPanel_ManualPanel_PaidRadioButton;
 	private JRadioButton DailyOperationPanel_ManualPanel_ReturnedRadioButton;
+	private JComboBox<Worker> DailyOperationPanel_ManualPanel_SellerComboBox;
 	private DailyOperationsPanel_DailyOperationsTableModel dailyOperationsPanel_DailyOperationsTableModel;
 	private JTable DailyOperationPanel_DailyOperationTable;
 	private Component parent;
@@ -35,7 +37,8 @@ public class DailyOperationsPanel_AddOperationButtonListener implements
 			JRadioButton DailyOperationPanel_ManualPanel_ReturnedRadioButton,
 			JTextField DailyOperationPanel_ManualPanel_NotesTextField,
 			DailyOperationsPanel_DailyOperationsTableModel dailyOperationsPanel_DailyOperationsTableModel,
-			JTable DailyOperationPanel_DailyOperationTable) {
+			JTable DailyOperationPanel_DailyOperationTable,
+			JComboBox<Worker> DailyOperationPanel_ManualPanel_SellerComboBox) {
 		this.DailyOperationPanel_ManualPanel_ItemsComboBox = DailyOperationPanel_ManualPanel_ItemsComboBox;
 		this.DailyOperationPanel_ManualPanel_AmountTextField = DailyOperationPanel_ManualPanel_AmountTextField;
 		this.DailyOperationPanel_ManualPanel_PaidRadioButton = DailyOperationPanel_ManualPanel_PaidRadioButton;
@@ -43,6 +46,7 @@ public class DailyOperationsPanel_AddOperationButtonListener implements
 		this.DailyOperationPanel_ManualPanel_NotesTextField = DailyOperationPanel_ManualPanel_NotesTextField;
 		this.dailyOperationsPanel_DailyOperationsTableModel = dailyOperationsPanel_DailyOperationsTableModel;
 		this.DailyOperationPanel_DailyOperationTable = DailyOperationPanel_DailyOperationTable;
+		this.DailyOperationPanel_ManualPanel_SellerComboBox = DailyOperationPanel_ManualPanel_SellerComboBox;
 		this.parent = parent;
 	}
 
@@ -67,9 +71,10 @@ public class DailyOperationsPanel_AddOperationButtonListener implements
 		boolean isPaid = DailyOperationPanel_ManualPanel_PaidRadioButton.isSelected();
 		boolean isReturned = DailyOperationPanel_ManualPanel_ReturnedRadioButton.isSelected();
 		String notes = DailyOperationPanel_ManualPanel_NotesTextField.getText();
+		int workerId = ((Worker) DailyOperationPanel_ManualPanel_SellerComboBox.getSelectedItem()).getWorkerId();
 		
 		try {
-			dailyOperationsPanel_DailyOperationsTableModel.addOperationToDatabase(item, amount, isPaid, isReturned, income, notes);
+			dailyOperationsPanel_DailyOperationsTableModel.addOperationToDatabase(item, amount, isPaid, isReturned, income, workerId, notes);
 		} catch (SQLException e) {
 			ErrorMessage.showErrorMessage(parent, e.getMessage());
 			e.printStackTrace();
@@ -78,6 +83,7 @@ public class DailyOperationsPanel_AddOperationButtonListener implements
 		DailyOperationPanel_DailyOperationTable.scrollRectToVisible(DailyOperationPanel_DailyOperationTable.getCellRect(DailyOperationPanel_DailyOperationTable.getRowCount()-1, 0, true));
 		DailyOperationPanel_ManualPanel_ItemsComboBox.requestFocusInWindow();
 		DailyOperationPanel_ManualPanel_ItemsComboBox.setSelectedIndex(0);
+		DailyOperationPanel_ManualPanel_SellerComboBox.setSelectedIndex(0);
 		DailyOperationPanel_ManualPanel_AmountTextField.setText("");
 		DailyOperationPanel_ManualPanel_PaidRadioButton.setSelected(true);
 		DailyOperationPanel_ManualPanel_NotesTextField.setText("");
