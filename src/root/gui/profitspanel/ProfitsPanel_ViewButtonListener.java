@@ -2,6 +2,7 @@ package root.gui.profitspanel;
 
 import global.Category;
 import global.Month;
+import global.Worker;
 import global.gui.ErrorMessage;
 
 import java.awt.Component;
@@ -31,6 +32,7 @@ public class ProfitsPanel_ViewButtonListener implements ActionListener {
 	private JSpinner ProfitsPanel_ManualPanel_DaySpinner;
 	private JSpinner ProfitsPanel_ManualPanel_YearSpinner;
 	private JPanel ProfitsPanel_ProfitsTablePanel;
+	private JComboBox<Worker> ProfitsPanel_ManualPanel_SellerComboBox;
 	
 	public ProfitsPanel_ViewButtonListener(Component parent, 
 			JComboBox<Month> ProfitsPanel_ManualPanel_MonthComboBox,
@@ -38,12 +40,14 @@ public class ProfitsPanel_ViewButtonListener implements ActionListener {
 			ProfitsTableModel profitsTableModel,
 			JSpinner ProfitsPanel_ManualPanel_DaySpinner,
 			JSpinner ProfitsPanel_ManualPanel_YearSpinner,
-			JPanel ProfitsPanel_ProfitsTablePanel) {
+			JPanel ProfitsPanel_ProfitsTablePanel,
+			JComboBox<Worker> ProfitsPanel_ManualPanel_SellerComboBox) {
 		this.ProfitsPanel_ManualPanel_CategoryComboBox = ProfitsPanel_ManualPanel_CategoryComboBox;
 		this.ProfitsPanel_ManualPanel_DaySpinner = ProfitsPanel_ManualPanel_DaySpinner;
 		this.ProfitsPanel_ManualPanel_MonthComboBox = ProfitsPanel_ManualPanel_MonthComboBox;
 		this.ProfitsPanel_ManualPanel_YearSpinner = ProfitsPanel_ManualPanel_YearSpinner;
 		this.ProfitsPanel_ProfitsTablePanel = ProfitsPanel_ProfitsTablePanel;
+		this.ProfitsPanel_ManualPanel_SellerComboBox = ProfitsPanel_ManualPanel_SellerComboBox;
 		this.profitsTableModel = profitsTableModel;
 		this.parent = parent;
 	}
@@ -76,6 +80,7 @@ public class ProfitsPanel_ViewButtonListener implements ActionListener {
 		month = Month.valueOf(ProfitsPanel_ManualPanel_MonthComboBox.getSelectedItem().toString());
 		year = (int) ProfitsPanel_ManualPanel_YearSpinner.getValue();
 		category = Category.valueOf(ProfitsPanel_ManualPanel_CategoryComboBox.getSelectedItem().toString());
+		String storedWorkerName = ProfitsPanel_ManualPanel_SellerComboBox.getSelectedItem().toString();
 		
 		if (month == Month.All) {
 			changeBorderNoMonths();
@@ -87,7 +92,7 @@ public class ProfitsPanel_ViewButtonListener implements ActionListener {
 			}
 		}
 		try {
-			profitsTableModel.loadFromDatabase(day, month, year, category, search);
+			profitsTableModel.loadFromDatabase(day, month, year, category, storedWorkerName, search);
 		} catch (SQLException e) {
 			ErrorMessage.showErrorMessage(parent, e.getMessage());
 			e.printStackTrace();

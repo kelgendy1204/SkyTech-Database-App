@@ -2,6 +2,7 @@ package root.gui;
 
 import global.Category;
 import global.Month;
+import global.Worker;
 import global.gui.ErrorMessage;
 
 import java.awt.Component;
@@ -43,6 +44,8 @@ public class RootSearchButtonListener implements ActionListener {
 	private JComboBox<Category> ProfitsPanel_ManualPanel_CategoryComboBox;
 	private JPanel ProfitsPanel_ProfitsTablePanel;
 	private ProfitsTableModel profitsTableModel;
+	private JComboBox<Worker> OperationsPanel_ManualPanel_SellerComboBox;
+	private JComboBox<Worker> ProfitsPanel_ManualPanel_SellerComboBox;
 	private RootItemsPanel_ManualPanel_ViewButtonListener rootItemsPanel_ManualPanel_ViewButtonListener;
 	
 	public RootSearchButtonListener(Component parent, JTabbedPane TabbedPane, JTextField ToolBar_ItemTextField, 
@@ -57,7 +60,9 @@ public class RootSearchButtonListener implements ActionListener {
 			JComboBox<Category> ProfitsPanel_ManualPanel_CategoryComboBox,
 			JPanel ProfitsPanel_ProfitsTablePanel,
 			ProfitsTableModel profitsTableModel,
-			RootItemsPanel_ManualPanel_ViewButtonListener rootItemsPanel_ManualPanel_ViewButtonListener) {
+			RootItemsPanel_ManualPanel_ViewButtonListener rootItemsPanel_ManualPanel_ViewButtonListener,
+			JComboBox<Worker> OperationsPanel_ManualPanel_SellerComboBox,
+			JComboBox<Worker> ProfitsPanel_ManualPanel_SellerComboBox) {
 		this.OperationsPanel_ManualPanel_CategoryComboBox = OperationsPanel_ManualPanel_CategoryComboBox;
 		this.OperationsPanel_ManualPanel_MonthComboBox = OperationsPanel_ManualPanel_MonthComboBox;
 		this.OperationsPanel_ManualPanel_YearSpinner = OperationsPanel_ManualPanel_YearSpinner;
@@ -73,6 +78,8 @@ public class RootSearchButtonListener implements ActionListener {
 		this.rootItemsPanel_ManualPanel_ViewButtonListener = rootItemsPanel_ManualPanel_ViewButtonListener;
 		this.profitsTableModel = profitsTableModel;
 		this.parent = parent;
+		this.OperationsPanel_ManualPanel_SellerComboBox = OperationsPanel_ManualPanel_SellerComboBox;
+		this.ProfitsPanel_ManualPanel_SellerComboBox = ProfitsPanel_ManualPanel_SellerComboBox;
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -91,6 +98,7 @@ public class RootSearchButtonListener implements ActionListener {
 		month = Month.valueOf(ProfitsPanel_ManualPanel_MonthComboBox.getSelectedItem().toString());
 		year = (int) ProfitsPanel_ManualPanel_YearSpinner.getValue();
 		category = Category.valueOf(ProfitsPanel_ManualPanel_CategoryComboBox.getSelectedItem().toString());
+		String storedWorkerName = ProfitsPanel_ManualPanel_SellerComboBox.getSelectedItem().toString();
 		
 		if(month == Month.All) {
 			changeProfitsPanelBorderNoMonths(year);
@@ -103,7 +111,7 @@ public class RootSearchButtonListener implements ActionListener {
 		}
 		
 		try {
-			profitsTableModel.loadFromDatabase(day, month, year, category, search);
+			profitsTableModel.loadFromDatabase(day, month, year, category, storedWorkerName, search);
 		} catch (SQLException e) {
 			ErrorMessage.showErrorMessage(parent, e.getMessage());
 			e.printStackTrace();
@@ -115,9 +123,10 @@ public class RootSearchButtonListener implements ActionListener {
 		year = (int) OperationsPanel_ManualPanel_YearSpinner.getValue();
 		category = Category.valueOf(OperationsPanel_ManualPanel_CategoryComboBox.getSelectedItem().toString());
 		changeOperationsBorder(year, month);
+		String storedWorkerName = OperationsPanel_ManualPanel_SellerComboBox.getSelectedItem().toString();
 		
 		try {
-			operationsTableModel.loadFromDatabase(0, month, year, category, search);
+			operationsTableModel.loadFromDatabase(0, month, year, category, storedWorkerName, search);
 		} catch (SQLException e) {
 			ErrorMessage.showErrorMessage(parent, e.getMessage());
 			e.printStackTrace();

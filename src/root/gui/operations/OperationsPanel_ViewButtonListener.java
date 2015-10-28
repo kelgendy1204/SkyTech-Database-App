@@ -2,6 +2,7 @@ package root.gui.operations;
 
 import global.Category;
 import global.Month;
+import global.Worker;
 import global.gui.ErrorMessage;
 
 import java.awt.Component;
@@ -31,6 +32,7 @@ public class OperationsPanel_ViewButtonListener implements ActionListener {
 	private JSpinner OperationsPanel_ManualPanel_DaySpinner;
 	private JSpinner OperationsPanel_ManualPanel_YearSpinner;
 	private JPanel OperationsPanel_OperationsTablePanel;
+	private JComboBox<Worker> OperationsPanel_ManualPanel_SellerComboBox;
 
 	public OperationsPanel_ViewButtonListener(
 			Component parent,
@@ -39,7 +41,8 @@ public class OperationsPanel_ViewButtonListener implements ActionListener {
 			RootOperationsTableModel operationsTableModel,
 			JSpinner OperationsPanel_ManualPanel_DaySpinner,
 			JSpinner OperationsPanel_ManualPanel_YearSpinner,
-			JPanel OperationsPanel_OperationsTablePanel) {
+			JPanel OperationsPanel_OperationsTablePanel,
+			JComboBox<Worker> OperationsPanel_ManualPanel_SellerComboBox) {
 		this.parent = parent;
 		this.OperationsPanel_ManualPanel_DaySpinner = OperationsPanel_ManualPanel_DaySpinner;
 		this.OperationsPanel_ManualPanel_MonthComboBox = OperationsPanel_ManualPanel_MonthComboBox;
@@ -47,6 +50,7 @@ public class OperationsPanel_ViewButtonListener implements ActionListener {
 		this.OperationsPanel_OperationsTablePanel = OperationsPanel_OperationsTablePanel;
 		this.operationsTableModel = operationsTableModel;
 		this.OperationsPanel_ManualPanel_CategoryComboBox = OperationsPanel_ManualPanel_CategoryComboBox;
+		this.OperationsPanel_ManualPanel_SellerComboBox = OperationsPanel_ManualPanel_SellerComboBox;
 	}
 	
 	@Override
@@ -71,6 +75,7 @@ public class OperationsPanel_ViewButtonListener implements ActionListener {
 		month = Month.valueOf(OperationsPanel_ManualPanel_MonthComboBox.getSelectedItem().toString());
 		year = (int) OperationsPanel_ManualPanel_YearSpinner.getValue();
 		category = Category.valueOf(OperationsPanel_ManualPanel_CategoryComboBox.getSelectedItem().toString());
+		String storedWorkerName = OperationsPanel_ManualPanel_SellerComboBox.getSelectedItem().toString();
 		if(day != 0){
 			changeBorder();
 		} else {
@@ -78,7 +83,7 @@ public class OperationsPanel_ViewButtonListener implements ActionListener {
 		}
 		
 		try {
-			operationsTableModel.loadFromDatabase(day, month, year, category, search);
+			operationsTableModel.loadFromDatabase(day, month, year, category, storedWorkerName, search);
 		} catch (SQLException e) {
 			ErrorMessage.showErrorMessage(parent, e.getMessage());
 			e.printStackTrace();

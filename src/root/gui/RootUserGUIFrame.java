@@ -150,7 +150,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         PreferencesMenu_SwitchToNormalUser = new javax.swing.JMenuItem();
         PreferencesMenu_Refresh = new javax.swing.JMenuItem();
         PreferencesMenu_ClearOperations = new javax.swing.JMenuItem();
-        rootSearchButtonListener = new RootSearchButtonListener(this, TabbedPane, ToolBar_ItemTextField, OperationsPanel_ManualPanel_MonthComboBox, OperationsPanel_ManualPanel_YearSpinner, operationsTableModel, OperationsPanel_OperationsTablePanel, OperationsPanel_ManualPanel_CategoryComboBox, ProfitsPanel_ManualPanel_DaySpinner, ProfitsPanel_ManualPanel_MonthComboBox, ProfitsPanel_ManualPanel_YearSpinner, ProfitsPanel_ManualPanel_CategoryComboBox, ProfitsPanel_ProfitsTablePanel, profitsTableModel, rootItemsPanel_ManualPanel_ViewButtonListener);
+        rootSearchButtonListener = new RootSearchButtonListener(this, TabbedPane, ToolBar_ItemTextField, OperationsPanel_ManualPanel_MonthComboBox, OperationsPanel_ManualPanel_YearSpinner, operationsTableModel, OperationsPanel_OperationsTablePanel, OperationsPanel_ManualPanel_CategoryComboBox, ProfitsPanel_ManualPanel_DaySpinner, ProfitsPanel_ManualPanel_MonthComboBox, ProfitsPanel_ManualPanel_YearSpinner, ProfitsPanel_ManualPanel_CategoryComboBox, ProfitsPanel_ProfitsTablePanel, profitsTableModel, rootItemsPanel_ManualPanel_ViewButtonListener, OperationsPanel_ManualPanel_SellerComboBox, ProfitsPanel_ManualPanel_SellerComboBox);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sky Tech");
@@ -444,7 +444,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         
         
 //////////////////////////////////////////////////////////////////////////////////////////////
-        ProfitsPanel_ManualPanel_ViewButton.addActionListener(new ProfitsPanel_ViewButtonListener(this, ProfitsPanel_ManualPanel_MonthComboBox, ProfitsPanel_ManualPanel_CategoryComboBox, profitsTableModel, ProfitsPanel_ManualPanel_DaySpinner, ProfitsPanel_ManualPanel_YearSpinner, ProfitsPanel_ProfitsTablePanel));
+        ProfitsPanel_ManualPanel_ViewButton.addActionListener(new ProfitsPanel_ViewButtonListener(this, ProfitsPanel_ManualPanel_MonthComboBox, ProfitsPanel_ManualPanel_CategoryComboBox, profitsTableModel, ProfitsPanel_ManualPanel_DaySpinner, ProfitsPanel_ManualPanel_YearSpinner, ProfitsPanel_ProfitsTablePanel, ProfitsPanel_ManualPanel_SellerComboBox));
         ProfitsPanel_ProfitsTable.addMouseListener(new MouseAdapter() {
         	public void mouseClicked(MouseEvent e) {
         		if(e.getButton() == MouseEvent.BUTTON3){
@@ -632,7 +632,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         
         
 //////////////////////////////////////////////////////////////////////////////////////////
-        OperationsPanel_ManualPanel_ViewButton.addActionListener(new OperationsPanel_ViewButtonListener(this, OperationsPanel_ManualPanel_MonthComboBox, OperationsPanel_ManualPanel_CategoryComboBox, operationsTableModel, OperationsPanel_ManualPanel_DaySpinner, OperationsPanel_ManualPanel_YearSpinner, OperationsPanel_OperationsTablePanel));
+        OperationsPanel_ManualPanel_ViewButton.addActionListener(new OperationsPanel_ViewButtonListener(this, OperationsPanel_ManualPanel_MonthComboBox, OperationsPanel_ManualPanel_CategoryComboBox, operationsTableModel, OperationsPanel_ManualPanel_DaySpinner, OperationsPanel_ManualPanel_YearSpinner, OperationsPanel_OperationsTablePanel, OperationsPanel_ManualPanel_SellerComboBox));
         OperationsPanel_OperationsTable.getTableHeader().addMouseListener(rootOperationsSortByListener);
         OperationsPanel_OperationsTable.addMouseListener(new OperationsTableMouseListener(operationsTableModel, OperationsPanel_OperationsTable, this));
         OperationsPanel_OperationsTable.addKeyListener(new OperationsTableKeyListener(operationsTableModel, OperationsPanel_OperationsTable, this));

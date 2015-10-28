@@ -96,7 +96,7 @@ public class RootOperationsTableModel extends AbstractTableModel {
 		}
 	}//begin from here
 	
-	public void loadFromDatabase(int day, Month monthChooser, int year, Category category, String search) throws SQLException{
+	public void loadFromDatabase(int day, Month monthChooser, int year, Category category, String storedWorkerName, String search) throws SQLException{
 		StringBuilder filterDate = new StringBuilder();
 		filterDate.append(" Where year(operations.date) = ");
 		filterDate.append(year);
@@ -124,6 +124,11 @@ public class RootOperationsTableModel extends AbstractTableModel {
 			filterDate.append("'");
 		}
 		
+		if (!(storedWorkerName == null || storedWorkerName.equals(""))) {
+			filterDate.append(" and stored_worker_name = ");
+			filterDate.append("'" + storedWorkerName + "'");
+		}
+		
 		
 		if(!search.equals("")){
 			filterDate.append(" and stored_name like '%");
@@ -139,7 +144,7 @@ public class RootOperationsTableModel extends AbstractTableModel {
 	private void sqlSelectStatement(String filterDate) throws SQLException {
 		operations.clear();
 		
-		StringBuilder sql = new StringBuilder("SELECT operation_id , stored_name , operations.amount , operations.date , operations.paid , operations.returned , operations.updated_date , operations.income, TrueIncome(operation_id) true_income, operations.profit , operations.notes From skytech.operations LEFT join skytech.items on items.item_id = operations.item_id");
+		StringBuilder sql = new StringBuilder("SELECT operation_id , stored_name , operations.amount , operations.date , operations.paid , operations.returned , operations.updated_date , operations.income, TrueIncome(operation_id) true_income, operations.profit , operations.notes, operations.worker_id , operations.stored_worker_name From skytech.operations LEFT join skytech.items on items.item_id = operations.item_id");
 		sql.append(filterDate);
 		
 		StringBuilder totalIncomeSQL = new StringBuilder("SELECT SUM(TrueIncome(operation_id)) AS total_income FROM skytech.items Right JOIN skytech.operations ON items.item_id = operations.item_id");
@@ -162,9 +167,11 @@ public class RootOperationsTableModel extends AbstractTableModel {
 			double income = results.getDouble("income");
 			double trueIncome = results.getDouble("true_income");
 			double profit = results.getDouble("profit");
+			int workerId = results.getInt("worker_id");
+			String storedWorkerName = results.getString("stored_worker_name");
 			String notes = results.getString("notes");
 			
-			operations.add(new RootOperation(operationId, itemSold, date, amount, paid, returned, updatedDate, income, trueIncome, profit, notes));
+			operations.add(new RootOperation(operationId, itemSold, date, amount, paid, returned, updatedDate, income, trueIncome, profit, workerId, storedWorkerName, notes));
 		}
 		
 		fireTableDataChanged();
@@ -187,17 +194,18 @@ public class RootOperationsTableModel extends AbstractTableModel {
 	}
 	
 	public void updateOperation(RootOperation operation, int operationRowNumber) throws SQLException {
-		String sql = ("UPDATE skytech.operations SET amount = ? , income = ? , notes = ? WHERE operation_id = ?" );
+		String sql = ("UPDATE skytech.operations SET amount = ? , income = ? , notes = ? , worker_id = ?  WHERE operation_id = ?" );
 		PreparedStatement updateStatement = database.getCon().prepareStatement(sql);
 		
 		updateStatement.setInt(1, operation.getAmount());
 		updateStatement.setDouble(2, operation.getIncome());
 		updateStatement.setString(3, operation.getNotes());
-		updateStatement.setInt(4, operation.getOperationId());
+		updateStatement.setInt(4, operation.getWorkerId());
+		updateStatement.setInt(5, operation.getOperationId());
 
 		updateStatement.executeUpdate();
 		
-		PreparedStatement selectStatement = database.getCon().prepareStatement("SELECT amount, updated_date, income, TrueIncome(operation_id) true_income, profit, notes FROM skytech.operations WHERE operation_id = ?");
+		PreparedStatement selectStatement = database.getCon().prepareStatement("SELECT amount, updated_date, income, TrueIncome(operation_id) true_income, profit, worker_id , stored_worker_name, notes FROM skytech.operations WHERE operation_id = ?");
 		selectStatement.setInt(1, operation.getOperationId());
 		
 		ResultSet results = selectStatement.executeQuery();
@@ -211,6 +219,8 @@ public class RootOperationsTableModel extends AbstractTableModel {
 		double income = results.getDouble("income");
 		double trueIncome = results.getDouble("true_income");
 		double profit = results.getDouble("profit");
+		int workerId = results.getInt("worker_id");
+		String storedWorkerName = results.getString("stored_worker_name");
 		String notes = results.getString("notes");
 		
 		operationUpdated.setAmount(amount);
@@ -219,6 +229,8 @@ public class RootOperationsTableModel extends AbstractTableModel {
 		operationUpdated.setNotes(notes);
 		operationUpdated.setUpdatedDate(updatedDate);
 		operationUpdated.setProfit(profit);
+		operationUpdated.setStoredWorkerName(storedWorkerName);
+		operationUpdated.setWorkerId(workerId);
 		
 		fireTableRowsUpdated(operationRowNumber, operationRowNumber);
 		
@@ -258,9 +270,11 @@ public class RootOperationsTableModel extends AbstractTableModel {
 			double income = results.getDouble("income");
 			double trueIncome = results.getDouble("true_income");
 			double profit = results.getDouble("profit");
+			int workerId = results.getInt("worker_id");
+			String storedWorkerName = results.getString("stored_worker_name");
 			String notes = results.getString("notes");
 			
-			operations.add(new RootOperation(operationId, itemSold, date, amount, paid, returned, updatedDate, income, trueIncome, profit, notes));
+			operations.add(new RootOperation(operationId, itemSold, date, amount, paid, returned, updatedDate, income, trueIncome, profit, workerId, storedWorkerName, notes));
 		}
 		
 		results.close();

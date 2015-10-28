@@ -183,7 +183,7 @@ public class DailyOperationsPanel_DailyOperationsTableModel extends AbstractTabl
 
 		updateStatement.executeUpdate();
 		
-		PreparedStatement selectStatement = database.getCon().prepareStatement("SELECT amount, updated_date, income, TrueIncome(operation_id) true_income, stored_worker_name, notes FROM skytech.operations WHERE operation_id = ?");
+		PreparedStatement selectStatement = database.getCon().prepareStatement("SELECT amount, updated_date, income, TrueIncome(operation_id) true_income, worker_id , stored_worker_name, notes FROM skytech.operations WHERE operation_id = ?");
 		selectStatement.setInt(1, operation.getOperationId());
 		
 		ResultSet results = selectStatement.executeQuery();
@@ -196,6 +196,7 @@ public class DailyOperationsPanel_DailyOperationsTableModel extends AbstractTabl
 		Timestamp updatedDate = results.getTimestamp("updated_date");
 		double income = results.getDouble("income");
 		double trueIncome = results.getDouble("true_income");
+		int workerId = results.getInt("worker_id");
 		String storedWorkerName = results.getString("stored_worker_name");
 		String notes = results.getString("notes");
 		
@@ -203,6 +204,7 @@ public class DailyOperationsPanel_DailyOperationsTableModel extends AbstractTabl
 		operationUpdated.setIncome(income);
 		operationUpdated.setTrueIncome(trueIncome);
 		operationUpdated.setNotes(notes);
+		operationUpdated.setWorkerId(workerId);
 		operationUpdated.setStoredWorkerName(storedWorkerName);
 		operationUpdated.setUpdatedDate(updatedDate);
 		
