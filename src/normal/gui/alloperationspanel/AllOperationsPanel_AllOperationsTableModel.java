@@ -166,18 +166,17 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 	}
 	
 	public void updateOperation(Operation operation, int operationRowNumber) throws SQLException {
-		String sql = ("UPDATE skytech.operations SET amount = ? , income = ? , worker_id = ? , notes = ? WHERE operation_id = ?" );
+		String sql = ("UPDATE skytech.operations SET amount = ? , income = ? , notes = ? WHERE operation_id = ?" );
 		PreparedStatement updateStatement = database.getCon().prepareStatement(sql);
 		
 		updateStatement.setInt(1, operation.getAmount());
 		updateStatement.setDouble(2, operation.getIncome());
-		updateStatement.setInt(3, operation.getWorkerId());
-		updateStatement.setString(4, operation.getNotes());
-		updateStatement.setInt(5, operation.getOperationId());
+		updateStatement.setString(3, operation.getNotes());
+		updateStatement.setInt(4, operation.getOperationId());
 
 		updateStatement.executeUpdate();
 		
-		PreparedStatement selectStatement = database.getCon().prepareStatement("SELECT amount, updated_date, income, TrueIncome(operation_id) true_income, worker_id, stored_worker_name, notes FROM skytech.operations WHERE operation_id = ?");
+		PreparedStatement selectStatement = database.getCon().prepareStatement("SELECT amount, updated_date, income, TrueIncome(operation_id) true_income, notes FROM skytech.operations WHERE operation_id = ?");
 		selectStatement.setInt(1, operation.getOperationId());
 		
 		ResultSet results = selectStatement.executeQuery();
@@ -190,16 +189,12 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 		Timestamp updatedDate = results.getTimestamp("updated_date");
 		double income = results.getDouble("income");
 		double trueIncome = results.getDouble("true_income");
-		int workerId = results.getInt("worker_id");
-		String storedWorkerName = results.getString("stored_worker_name");
 		String notes = results.getString("notes");
 		
 		operationUpdated.setAmount(amount);
 		operationUpdated.setIncome(income);
 		operationUpdated.setTrueIncome(trueIncome);
-		operationUpdated.setStoredWorkerName(storedWorkerName);
 		operationUpdated.setNotes(notes);
-		operationUpdated.setWorkerId(workerId);
 		operationUpdated.setUpdatedDate(updatedDate);
 		
 		fireTableRowsUpdated(operationRowNumber, operationRowNumber);

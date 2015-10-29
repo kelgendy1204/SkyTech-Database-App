@@ -170,7 +170,7 @@ public class DailyOperationsPanel_DailyOperationsTableModel extends AbstractTabl
 	}
 	
 	public void updateOperation(Operation operation, int operationRowNumber) throws SQLException {
-		String sql = ("UPDATE skytech.operations SET amount = ? , paid = ? , returned = ?, income = ? , worker_id = ? , notes = ? WHERE operation_id = ?" );
+		String sql = ("UPDATE skytech.operations SET amount = ? , paid = ? , returned = ?, income = ? , notes = ? WHERE operation_id = ?" );
 		PreparedStatement updateStatement = database.getCon().prepareStatement(sql);
 		
 		updateStatement.setInt(1, operation.getAmount());
@@ -178,12 +178,11 @@ public class DailyOperationsPanel_DailyOperationsTableModel extends AbstractTabl
 		updateStatement.setBoolean(3, operation.isReturned());
 		updateStatement.setDouble(4, operation.getIncome());
 		updateStatement.setString(5, operation.getNotes());
-		updateStatement.setInt(6, operation.getWorkerId());
-		updateStatement.setInt(7, operation.getOperationId());
+		updateStatement.setInt(6, operation.getOperationId());
 
 		updateStatement.executeUpdate();
 		
-		PreparedStatement selectStatement = database.getCon().prepareStatement("SELECT amount, updated_date, income, TrueIncome(operation_id) true_income, worker_id , stored_worker_name, notes FROM skytech.operations WHERE operation_id = ?");
+		PreparedStatement selectStatement = database.getCon().prepareStatement("SELECT amount, updated_date, income, TrueIncome(operation_id) true_income, notes FROM skytech.operations WHERE operation_id = ?");
 		selectStatement.setInt(1, operation.getOperationId());
 		
 		ResultSet results = selectStatement.executeQuery();
@@ -196,16 +195,12 @@ public class DailyOperationsPanel_DailyOperationsTableModel extends AbstractTabl
 		Timestamp updatedDate = results.getTimestamp("updated_date");
 		double income = results.getDouble("income");
 		double trueIncome = results.getDouble("true_income");
-		int workerId = results.getInt("worker_id");
-		String storedWorkerName = results.getString("stored_worker_name");
 		String notes = results.getString("notes");
 		
 		operationUpdated.setAmount(amount);
 		operationUpdated.setIncome(income);
 		operationUpdated.setTrueIncome(trueIncome);
 		operationUpdated.setNotes(notes);
-		operationUpdated.setWorkerId(workerId);
-		operationUpdated.setStoredWorkerName(storedWorkerName);
 		operationUpdated.setUpdatedDate(updatedDate);
 		
 		fireTableRowsUpdated(operationRowNumber, operationRowNumber);
