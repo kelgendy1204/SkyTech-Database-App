@@ -148,7 +148,7 @@ public class RootUserSwitchingDialog extends javax.swing.JDialog {
 		});
         
         
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
     private void switchToRoot() {
 		String username = UsernameTextField.getText();

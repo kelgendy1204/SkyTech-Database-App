@@ -809,6 +809,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         PreferencesMenu_SwitchToNormalUser.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				//////remove new dispatcher
 				RootUserGUIFrame.this.dispose();
 				new NormalUserGUIFrame().setVisible(true);
 			}

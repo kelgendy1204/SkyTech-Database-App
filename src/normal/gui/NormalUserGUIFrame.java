@@ -72,7 +72,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
 
 	
 	private static final long serialVersionUID = -2511859348897938551L;
-	private SpecialCharacterDispatcher specialCharacterispatcher;
+	private SpecialCharacterDispatcher specialCharacterDispatcher;
 
 	
 	public NormalUserGUIFrame() {
@@ -149,7 +149,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         PreferencesMenu_Refresh = new javax.swing.JMenuItem();
         searchButtonListener = new SearchButtonListener(this, TabbedPane, ToolBar_ItemTextField, getDailyOperationsPanel_DailyOperationsTableModel(), itemsPanel_ManualPanel_ViewButtonListener, AllOperationsPanel_ManualPanel_MonthComboBox, AllOperationsPanel_ManualPanel_YearSpinner,allOperationsPanel_AllOperationsTableModel, AllOperationsPanel_AllOperationsTablePanel,DailyOperationPanel_DailyOperationTablePanel, AllOperationPanel_ManualPanel_SellerComboBox, DailyOperationPanel_ManualPanel_SellerComboBox);
         dailyOperationsPanel_AddOperationButtonListener = new DailyOperationsPanel_AddOperationButtonListener(this, DailyOperationPanel_ManualPanel_ItemsComboBox, DailyOperationPanel_ManualPanel_AmountTextField, DailyOperationPanel_ManualPanel_PaidRadioButton, DailyOperationPanel_ManualPanel_ReturnedRadioButton, DailyOperationPanel_ManualPanel_NotesTextField, getDailyOperationsPanel_DailyOperationsTableModel(), getDailyOperationPanel_DailyOperationTable(), DailyOperationPanel_ManualPanel_SellerComboBox);
-        specialCharacterispatcher = new SpecialCharacterDispatcher(this, TabbedPane, DailyOperationPanel, DailyOperationPanel_ManualPanel_ItemsComboBox);
+        specialCharacterDispatcher = new SpecialCharacterDispatcher(this, TabbedPane, DailyOperationPanel, DailyOperationPanel_ManualPanel_ItemsComboBox);
         
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Sky Tech");
@@ -705,7 +705,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         PreferencesMenu_SwitchToRootUser.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				RootUserSwitchingDialog rootUserOptionsDialog = new RootUserSwitchingDialog(NormalUserGUIFrame.this, specialCharacterispatcher);
+				RootUserSwitchingDialog rootUserOptionsDialog = new RootUserSwitchingDialog(NormalUserGUIFrame.this, specialCharacterDispatcher);
 		        Dimension dimension = NormalUserGUIFrame.this.getSize();
 		        rootUserOptionsDialog.setLocation(dimension.width/2-rootUserOptionsDialog.getSize().width/2, dimension.height/2-rootUserOptionsDialog.getSize().height/2);
 		        rootUserOptionsDialog.setVisible(true);
@@ -733,7 +733,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         
         
 ///////////////////////////////////////////////////////////////////////////
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(specialCharacterispatcher);     
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(specialCharacterDispatcher);     
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         System.gc();
 ///////////////////////////////////////////////////////////////////////////
