@@ -38,7 +38,7 @@ CREATE TABLE `items` (
   PRIMARY KEY (`item_id`),
   UNIQUE KEY `name_UNIQUE` (`name`),
   KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=807 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=888 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -105,7 +105,7 @@ CREATE TABLE `operations` (
   PRIMARY KEY (`operation_id`),
   KEY `item_id` (`item_id`),
   KEY `stored_name` (`stored_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4810 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4959 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -132,12 +132,20 @@ SET new.stored_worker_name = (SELECT worker_name from workers where workers.work
 
 IF new.paid = 1 THEN 
   set new.profit = (new.income - (new.amount * GetSellingPriceFromItems(new.item_id)));
-  update items set amount = (amount - new.amount) where item_id = new.item_id ;
+	IF NOT (new.stored_name = 'الغير مجرود') THEN
+		update items set amount = (amount - new.amount) where item_id = new.item_id ;
+	END IF;
 END IF;
 
 IF new.paid = 0 THEN 
   set new.profit = - (new.income - (new.amount * GetSellingPriceFromItems(new.item_id)));
-  update items set amount = (amount + new.amount) where item_id = new.item_id ;
+	IF NOT (new.stored_name = 'الغير مجرود') THEN
+		update items set amount = (amount + new.amount) where item_id = new.item_id ;
+	END IF;
+END IF;
+
+IF new.stored_name = 'الغير مجرود' THEN 
+  set new.profit = 0;
 END IF;
 
 end */;;
@@ -168,17 +176,25 @@ begin
 
 IF new.paid = 1 THEN 
  set new.profit = (new.income - (new.amount * GetSellingPriceFromItems(new.item_id)));
- update items set amount = (amount + old.amount) where item_id = new.item_id ;
- update items set amount = (amount - new.amount) where item_id = new.item_id ;
+	IF NOT (new.stored_name = 'الغير مجرود') THEN
+		update items set amount = (amount + old.amount) where item_id = new.item_id ;
+		update items set amount = (amount - new.amount) where item_id = new.item_id ;
+	END IF;
 END IF;
 
 IF new.paid = 0 THEN 
   set new.profit = - (new.income - (new.amount * GetSellingPriceFromItems(new.item_id)));
-  update items set amount = (amount - old.amount) where item_id = new.item_id ;
-  update items set amount = (amount + new.amount) where item_id = new.item_id ;
+	IF NOT (new.stored_name = 'الغير مجرود') THEN
+		update items set amount = (amount - old.amount) where item_id = new.item_id ;
+		update items set amount = (amount + new.amount) where item_id = new.item_id ;
+	END IF;
 END IF;
 
-end */;;
+IF new.stored_name = 'الغير مجرود' THEN 
+  set new.profit = 0;
+END IF;
+
+END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -198,13 +214,17 @@ BEFORE DELETE ON `operations`
 FOR EACH ROW
 
 BEGIN
-  IF (@DISABLE_TRIGGERS IS NULL) then
+  IF (@DISABLE_TRIGGERS IS NULL) THEN
     IF old.paid = 1 THEN 
-      update items set amount = (amount + old.amount) where item_id = old.item_id ;
+		IF NOT (old.stored_name = 'الغير مجرود') THEN
+		  update items set amount = (amount + old.amount) where item_id = old.item_id ;
+		END IF;
     END IF;
 
     IF old.paid = 0 THEN 
-      update items set amount = (amount - old.amount) where item_id = old.item_id ;
+		IF NOT (old.stored_name = 'الغير مجرود') THEN
+		  update items set amount = (amount - old.amount) where item_id = old.item_id ;
+		END IF;
     END IF;
   END IF;
 END */;;
@@ -226,7 +246,7 @@ CREATE TABLE `workers` (
   `worker_name` varchar(45) NOT NULL,
   PRIMARY KEY (`worker_id`),
   UNIQUE KEY `workers_name_UNIQUE` (`worker_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -336,4 +356,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-10-09 22:15:53
+-- Dump completed on 2015-11-03  2:42:26

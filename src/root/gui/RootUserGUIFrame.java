@@ -10,6 +10,7 @@ import global.gui.ErrorMessage;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,6 +40,7 @@ import javax.swing.UIDefaults;
 
 import logic.BackUpAndRestore;
 import logic.DateFormats;
+import logic.SpecialCharacterDispatcher;
 import logic.TextFieldHandeler;
 import normal.gui.NormalUserGUIFrame;
 import root.gui.itemspanel.ItemsPanel_ItemsTableKeyListener;
@@ -66,6 +68,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
 	private RootItemSortByListener rootItemSortByListener;
 	private ProfitsSortByListener profitsSortByListener;
 	private RootOperationsSortByListener rootOperationsSortByListener;
+	private SpecialCharacterDispatcher specialCharacterDispatcher;
 	
     public RootUserGUIFrame() {
         initComponents();
@@ -151,7 +154,8 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         PreferencesMenu_Refresh = new javax.swing.JMenuItem();
         PreferencesMenu_ClearOperations = new javax.swing.JMenuItem();
         rootSearchButtonListener = new RootSearchButtonListener(this, TabbedPane, ToolBar_ItemTextField, OperationsPanel_ManualPanel_MonthComboBox, OperationsPanel_ManualPanel_YearSpinner, operationsTableModel, OperationsPanel_OperationsTablePanel, OperationsPanel_ManualPanel_CategoryComboBox, ProfitsPanel_ManualPanel_DaySpinner, ProfitsPanel_ManualPanel_MonthComboBox, ProfitsPanel_ManualPanel_YearSpinner, ProfitsPanel_ManualPanel_CategoryComboBox, ProfitsPanel_ProfitsTablePanel, profitsTableModel, rootItemsPanel_ManualPanel_ViewButtonListener, OperationsPanel_ManualPanel_SellerComboBox, ProfitsPanel_ManualPanel_SellerComboBox);
-
+        specialCharacterDispatcher = new SpecialCharacterDispatcher(this, TabbedPane, ItemsPanel, ToolBar_ItemTextField);
+        
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sky Tech");
         setName("Root User GUI");
@@ -810,6 +814,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				//////remove new dispatcher
+				KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(RootUserGUIFrame.this.specialCharacterDispatcher);
 				RootUserGUIFrame.this.dispose();
 				new NormalUserGUIFrame().setVisible(true);
 			}
@@ -843,6 +848,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         
         
 ///////////////////////////////////////////////////////////////////////////
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(specialCharacterDispatcher);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         System.gc();
 ///////////////////////////////////////////////////////////////////////////
@@ -952,6 +958,14 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
 		
 		return workersNamesArray;
 		
+	}
+	
+	public javax.swing.JTable getItemsPanel_ItemsTable() {
+		return ItemsPanel_ItemsTable;
+	}
+	
+	public RootItemPanelTableModel getRootItemPanelTableModel() {
+		return rootItemPanelTableModel;
 	}
     
     public static void main(String args[]) {

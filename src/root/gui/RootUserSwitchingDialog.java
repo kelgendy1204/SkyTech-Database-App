@@ -17,7 +17,7 @@ public class RootUserSwitchingDialog extends javax.swing.JDialog {
 	
 	private javax.swing.JFrame parent;
 
-	private SpecialCharacterDispatcher specialCharaterDispatcher;
+	private SpecialCharacterDispatcher specialCharacterDispatcher;
 	
     public RootUserSwitchingDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -27,7 +27,7 @@ public class RootUserSwitchingDialog extends javax.swing.JDialog {
     public RootUserSwitchingDialog(java.awt.Frame parent, SpecialCharacterDispatcher asterixDispatcher) {
     	super(parent, ModalityType.APPLICATION_MODAL);
     	this.parent = (JFrame) parent;
-    	this.specialCharaterDispatcher = asterixDispatcher;
+    	this.specialCharacterDispatcher = asterixDispatcher;
 		initComponents();
 	}
 
@@ -158,7 +158,7 @@ public class RootUserSwitchingDialog extends javax.swing.JDialog {
 			RootUserSwitchingDialog.this.dispose();
 			parent.dispose();
 			new RootUserGUIFrame().setVisible(true);
-	        KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(specialCharaterDispatcher);
+	        KeyboardFocusManager.getCurrentKeyboardFocusManager().removeKeyEventDispatcher(specialCharacterDispatcher);
 		}
 	}
 
