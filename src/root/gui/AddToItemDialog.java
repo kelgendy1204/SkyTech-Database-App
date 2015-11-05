@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import javax.swing.JTable;
 
 import logic.NumbersHandling;
-import logic.TextFieldHandeler;
+import logic.TextFieldAndComboBoxHandeler;
 import root.gui.itemspanel.RootItem;
 import root.gui.itemspanel.RootItemPanelTableModel;
 
@@ -131,7 +131,7 @@ public class AddToItemDialog extends javax.swing.JDialog {
         gridBagConstraints.ipadx = 250;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         Panel2.add(addToItemTextField, gridBagConstraints);
-        TextFieldHandeler.orientationHandeler(addToItemTextField);
+        TextFieldAndComboBoxHandeler.orientationHandeler(addToItemTextField);
 
         addToItemLabel.setText("Add to item : ");
         gridBagConstraints = new java.awt.GridBagConstraints();

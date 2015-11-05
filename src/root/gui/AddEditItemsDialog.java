@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import javax.swing.JTable;
 
 import logic.NumbersHandling;
-import logic.TextFieldHandeler;
+import logic.TextFieldAndComboBoxHandeler;
 import root.gui.itemspanel.RootItem;
 import root.gui.itemspanel.RootItemPanelTableModel;
 
@@ -114,21 +114,21 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
 					}
 				}			
 			});
-			TextFieldHandeler.selectAllAtTextFieldFocus(AmountTextField);
+			TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(AmountTextField);
 			
 			ItemTextField.addKeyListener(AmountTextField.getKeyListeners()[AmountTextField.getKeyListeners().length - 1]);
-			TextFieldHandeler.selectAllAtTextFieldFocus(ItemTextField);
+			TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(ItemTextField);
 			
 			CategoryComboBox.addKeyListener(AmountTextField.getKeyListeners()[AmountTextField.getKeyListeners().length - 1]);
 			
 			SellingPriceTextField.addKeyListener(AmountTextField.getKeyListeners()[AmountTextField.getKeyListeners().length - 1]);
-			TextFieldHandeler.selectAllAtTextFieldFocus(SellingPriceTextField);
+			TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(SellingPriceTextField);
 			
 			BuyingPriceTextField.addKeyListener(AmountTextField.getKeyListeners()[AmountTextField.getKeyListeners().length - 1]);
-			TextFieldHandeler.selectAllAtTextFieldFocus(BuyingPriceTextField);
+			TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(BuyingPriceTextField);
 			
 			NotesTextField.addKeyListener(AmountTextField.getKeyListeners()[AmountTextField.getKeyListeners().length - 1]);
-			TextFieldHandeler.selectAllAtTextFieldFocus(NotesTextField);
+			TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(NotesTextField);
 			
 			break;
 		}
@@ -229,7 +229,7 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
         gridBagConstraints.ipadx = 121;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         Panel2.add(NotesTextField, gridBagConstraints);
-        TextFieldHandeler.orientationHandeler(NotesTextField);
+        TextFieldAndComboBoxHandeler.orientationHandeler(NotesTextField);
 
         BuyingPriceTextField.setColumns(10);
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -263,7 +263,7 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         Panel2.add(ItemTextField, gridBagConstraints);
-        TextFieldHandeler.orientationHandeler(ItemTextField);
+        TextFieldAndComboBoxHandeler.orientationHandeler(ItemTextField);
 
         ItemLabel2.setText(":  «·„‰ Ã");
         gridBagConstraints = new java.awt.GridBagConstraints();

@@ -10,7 +10,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
 
 import logic.NumbersHandling;
-import logic.TextFieldHandeler;
+import logic.TextFieldAndComboBoxHandeler;
 import normal.gui.alloperationspanel.AllOperationsPanel_AllOperationsTableModel;
 import normal.gui.alloperationspanel.Operation;
 import normal.gui.dailyoperations.DailyOperationsPanel_DailyOperationsTableModel;
@@ -200,7 +200,7 @@ public class EditOperationsDialog extends javax.swing.JDialog {
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
 		gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
 		jPanel1.add(NotesTextField, gridBagConstraints);
-		TextFieldHandeler.orientationHandeler(NotesTextField);
+		TextFieldAndComboBoxHandeler.orientationHandeler(NotesTextField);
 
 		IncomeLabel.setText("Income :");
 		gridBagConstraints = new java.awt.GridBagConstraints();
@@ -288,7 +288,7 @@ public class EditOperationsDialog extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
 		jPanel1.add(ItemSoldName, gridBagConstraints);
-		TextFieldHandeler.orientationHandeler(ItemSoldName);
+		TextFieldAndComboBoxHandeler.orientationHandeler(ItemSoldName);
 
 		Panel1.setLayout(new java.awt.GridBagLayout());
 
@@ -326,9 +326,9 @@ public class EditOperationsDialog extends javax.swing.JDialog {
 		gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
 		getContentPane().add(jPanel1, gridBagConstraints);
 		
-		TextFieldHandeler.selectAllAtTextFieldFocus(IncomeTextField);
-		TextFieldHandeler.selectAllAtTextFieldFocus(AmountTextField);
-		TextFieldHandeler.selectAllAtTextFieldFocus(NotesTextField);
+		TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(IncomeTextField);
+		TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(AmountTextField);
+		TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(NotesTextField);
 
 		pack();
 	}// </editor-fold>                           

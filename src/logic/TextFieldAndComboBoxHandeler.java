@@ -1,6 +1,7 @@
 package logic;
 
 import java.awt.ComponentOrientation;
+import java.awt.Font;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.InputEvent;
@@ -11,7 +12,8 @@ import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-public class TextFieldHandeler {
+public class TextFieldAndComboBoxHandeler {
+	
 	
 	public static void orientationHandeler (JComponent component){
 		component.addKeyListener(new KeyAdapter() {
@@ -49,6 +51,11 @@ public class TextFieldHandeler {
 				});
 			}
 		});
+	}
+	
+	public static void setCenterAlignmentForTextField (JTextField textField) {
+		textField.setHorizontalAlignment(JTextField.CENTER);
+		textField.setFont(new Font("Tahoma", Font.BOLD , 13));
 	}
 	
 }

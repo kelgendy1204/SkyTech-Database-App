@@ -274,6 +274,8 @@ public class RootOperationsTableModel extends AbstractTableModel {
 		
 		results.close();
 		statement.close();
+
+		fireTableDataChanged();
 	}
 
 	public void setLastTotalIncomeSQL(String lastTotalIncomeSQL) {

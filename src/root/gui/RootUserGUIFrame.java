@@ -41,7 +41,7 @@ import javax.swing.UIDefaults;
 import logic.BackUpAndRestore;
 import logic.DateFormats;
 import logic.SpecialCharacterDispatcher;
-import logic.TextFieldHandeler;
+import logic.TextFieldAndComboBoxHandeler;
 import normal.gui.NormalUserGUIFrame;
 import root.gui.itemspanel.ItemsPanel_ItemsTableKeyListener;
 import root.gui.itemspanel.ItemsPanel_ItemsTableMouseListener;
@@ -716,7 +716,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         		}
         	}
 		});
-        TextFieldHandeler.orientationHandeler(ToolBar_ItemTextField);
+        TextFieldAndComboBoxHandeler.orientationHandeler(ToolBar_ItemTextField);
 //////////////////////////////////////////////////////////////////////////////////  
 
         

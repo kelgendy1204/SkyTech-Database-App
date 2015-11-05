@@ -40,14 +40,17 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.UIDefaults;
 
 import logic.BackUpAndRestore;
 import logic.DateFormats;
 import logic.SpecialCharacterDispatcher;
-import logic.TextFieldHandeler;
+import logic.TextFieldAndComboBoxHandeler;
+import normal.gui.alloperationspanel.AllOperationsPanel_AllOperationsTableKeyListener;
 import normal.gui.alloperationspanel.AllOperationsPanel_AllOperationsTableModel;
+import normal.gui.alloperationspanel.AllOperationsPanel_AllOperationsTableMousListener;
 import normal.gui.alloperationspanel.AllOperationsPanel_ManualPanel_ViewButtonListener;
 import normal.gui.alloperationspanel.Operations_SortByListener;
 import normal.gui.dailyoperations.DailyOperationsPanel_AddOperationButtonListener;
@@ -73,6 +76,8 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
 	
 	private static final long serialVersionUID = -2511859348897938551L;
 	private SpecialCharacterDispatcher specialCharacterDispatcher;
+	
+
 
 	
 	public NormalUserGUIFrame() {
@@ -105,10 +110,12 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         DailyOperationPanel_ManualPanel_SellerComboBox = new javax.swing.JComboBox<Worker>();
         DailyOperationPanel_ManualPanel_AmountTextField = new javax.swing.JTextField();
         DailyOperationPanel_ManualPanel_AddOperationButton = new javax.swing.JButton();
+        DailyOperationPanel_ManualPanel_IncomeLabel = new JLabel();
         DailyOperationPanel_DailyOperationTablePanel = new javax.swing.JPanel();
+        DailyOperationPanel_ManualPanel_IncomeTextField = new JTextField();
         ScrollPane1 = new javax.swing.JScrollPane();
         DailyOperationPanel_DailyOperationTable = new javax.swing.JTable();
-        dailyOperationsPanel_DailyOperationsTableModel = new DailyOperationsPanel_DailyOperationsTableModel(database);
+        dailyOperationsPanel_DailyOperationsTableModel = new DailyOperationsPanel_DailyOperationsTableModel(database, DailyOperationPanel_ManualPanel_IncomeTextField);
         AllOperationsPanel = new javax.swing.JPanel();
         AllOperationsPanel_ManualPanel = new javax.swing.JPanel();
         AllOperationsPanel_ManualPanel_DateOfOperationsLabel = new javax.swing.JLabel();
@@ -192,6 +199,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         DailyOperationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Daily operations", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         DailyOperationPanel_ManualPanel.setLayout(new java.awt.GridBagLayout());
+        int horizontalSpacesBetweenLines = 20;
 
         DailyOperationPanel_ItemLabel.setText("Item :");
         DailyOperationPanel_ItemLabel.setDisplayedMnemonic(KeyEvent.VK_I);
@@ -207,7 +215,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+		gridBagConstraints.insets = new java.awt.Insets(5, horizontalSpacesBetweenLines, 5, 5);
         DailyOperationPanel_ManualPanel.add(DailyOperationPanel_ManualPanel_PaidRadioButton, gridBagConstraints);
 
         DailyOperationPanel_ManualPanel_ReturnedRadioButton.setText("Returned");
@@ -225,7 +233,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, horizontalSpacesBetweenLines, 5, 5);
         DailyOperationPanel_ManualPanel.add(DailyOperationPanel_AmountLabel, gridBagConstraints);
 
         DailyOperationPanel_NotesLabel.setText("Notes :");
@@ -244,16 +252,17 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 120;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         DailyOperationPanel_ManualPanel.add(DailyOperationPanel_ManualPanel_AmountTextField, gridBagConstraints);
 
+        DailyOperationPanel_ManualPanel_AmountTextField.setColumns(8);
+        
         DailyOperationPanel_SellerLabel.setText("Seller :");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = GridBagConstraints.EAST;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, horizontalSpacesBetweenLines, 5, 5);
         DailyOperationPanel_ManualPanel.add(DailyOperationPanel_SellerLabel, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
@@ -269,9 +278,30 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, horizontalSpacesBetweenLines, 5, 5);
         DailyOperationPanel_ManualPanel.add(DailyOperationPanel_ManualPanel_AddOperationButton, gridBagConstraints);
         DailyOperationPanel_ManualPanel_AddOperationButton.setMnemonic(KeyEvent.VK_A);
+        
+        DailyOperationPanel_ManualPanel_IncomeLabel.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        DailyOperationPanel_ManualPanel_IncomeLabel.setText("Total income :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, horizontalSpacesBetweenLines, 5, 5);
+        DailyOperationPanel_ManualPanel.add(DailyOperationPanel_ManualPanel_IncomeLabel, gridBagConstraints);
+
+        DailyOperationPanel_ManualPanel_IncomeTextField.setEditable(false);
+        DailyOperationPanel_ManualPanel_IncomeTextField.setText(Double.toString(0));
+        DailyOperationPanel_ManualPanel_IncomeTextField.setColumns(8);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        DailyOperationPanel_ManualPanel.add(DailyOperationPanel_ManualPanel_IncomeTextField, gridBagConstraints);
+
+        TextFieldAndComboBoxHandeler.setCenterAlignmentForTextField(DailyOperationPanel_ManualPanel_IncomeTextField);
+        TextFieldAndComboBoxHandeler.setCenterAlignmentForTextField(DailyOperationPanel_ManualPanel_AmountTextField);
+        TextFieldAndComboBoxHandeler.setCenterAlignmentForTextField(DailyOperationPanel_ManualPanel_NotesTextField);
         
         loadItemComboBox();
         loadSellerComboBox();
@@ -327,10 +357,10 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         		}
         	}
 		});
-        TextFieldHandeler.orientationHandeler((JComponent) DailyOperationPanel_ManualPanel_ItemsComboBox.getEditor().getEditorComponent());
+        TextFieldAndComboBoxHandeler.orientationHandeler((JComponent) DailyOperationPanel_ManualPanel_ItemsComboBox.getEditor().getEditorComponent());
         
         DailyOperationPanel_ManualPanel_NotesTextField.addKeyListener(DailyOperationPanel_ManualPanel_AmountTextField.getKeyListeners()[DailyOperationPanel_ManualPanel_AmountTextField.getKeyListeners().length - 1]);
-        TextFieldHandeler.orientationHandeler(DailyOperationPanel_ManualPanel_NotesTextField);
+        TextFieldAndComboBoxHandeler.orientationHandeler(DailyOperationPanel_ManualPanel_NotesTextField);
         
         DailyOperationPanel_ManualPanel_PaidRadioButton.addKeyListener(DailyOperationPanel_ManualPanel_AmountTextField.getKeyListeners()[DailyOperationPanel_ManualPanel_AmountTextField.getKeyListeners().length - 1]);
         DailyOperationPanel_ManualPanel_ReturnedRadioButton.addKeyListener(DailyOperationPanel_ManualPanel_AmountTextField.getKeyListeners()[DailyOperationPanel_ManualPanel_AmountTextField.getKeyListeners().length - 1]);
@@ -409,7 +439,6 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 25;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 7);
         AllOperationsPanel_ManualPanel.add(AllOperationsPanel_ManualPanel_MonthComboBox, gridBagConstraints);
 
@@ -480,8 +509,8 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         
         
 ///////////////////////////////////////////////////////////////////////////////////////////////////////      
-//        AllOperationsPanel_AllOperationsTable.addMouseListener(new AllOperationsPanel_AllOperationsTableMousListener(this, allOperationsPanel_AllOperationsTableModel, AllOperationsPanel_AllOperationsTable));
-//        AllOperationsPanel_AllOperationsTable.addKeyListener(new AllOperationsPanel_AllOperationsTableKeyListener(this, allOperationsPanel_AllOperationsTableModel, AllOperationsPanel_AllOperationsTable));
+        AllOperationsPanel_AllOperationsTable.addMouseListener(new AllOperationsPanel_AllOperationsTableMousListener(this, allOperationsPanel_AllOperationsTableModel, AllOperationsPanel_AllOperationsTable));
+        AllOperationsPanel_AllOperationsTable.addKeyListener(new AllOperationsPanel_AllOperationsTableKeyListener(this, allOperationsPanel_AllOperationsTableModel, AllOperationsPanel_AllOperationsTable));
         AllOperationsPanel_ManualPanel_ViewButton.addActionListener(allOperationsPanel_ManualPanel_ViewButtonListener);
         AllOperationsPanel_AllOperationsTable.getTableHeader().addMouseListener(operations_SortByListener);
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -545,7 +574,6 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 50;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         ItemsPanel_ManualPanel.add(ItemsPanel_ManualPanel_CategoryComboBox, gridBagConstraints);
 
@@ -617,7 +645,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         		}
         	}
 		});
-        TextFieldHandeler.orientationHandeler(ToolBar_ItemTextField);
+        TextFieldAndComboBoxHandeler.orientationHandeler(ToolBar_ItemTextField);
 ////////////////////////////////////////////////////////////////////////////////////////////////        
 
         FileMenu.setText("File");
@@ -949,6 +977,8 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton DailyOperationPanel_ManualPanel_ReturnedRadioButton;
     private javax.swing.JComboBox<Item> DailyOperationPanel_ManualPanel_ItemsComboBox;
     private javax.swing.JComboBox<Worker> DailyOperationPanel_ManualPanel_SellerComboBox;
+    private JTextField DailyOperationPanel_ManualPanel_IncomeTextField;
+	private JLabel DailyOperationPanel_ManualPanel_IncomeLabel;
     private javax.swing.JLabel DailyOperationPanel_NotesLabel;
     private Operations_SortByListener operations_SortByListener;
     private Database database;
