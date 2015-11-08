@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
 
 import logic.DateFormats;
@@ -24,10 +25,13 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 	public ArrayList<Operation> operations;
 	private Database database;
 	private String lastSQL;
+	private String lastTotalIncomeSQL;
+	private JTextField AllOperationsPanel_ManualPanel_IncomeTextField;
 	
-	public AllOperationsPanel_AllOperationsTableModel(Database database) {
+	public AllOperationsPanel_AllOperationsTableModel(Database database, JTextField AllOperationsPanel_ManualPanel_IncomeTextField) {
 		this.database = database;
 		operations = new ArrayList<Operation>();
+		this.AllOperationsPanel_ManualPanel_IncomeTextField = AllOperationsPanel_ManualPanel_IncomeTextField;
 	}
 	
 	public void addOperation(Operation operation) {
@@ -128,7 +132,11 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 		StringBuilder sql = new StringBuilder("SELECT operation_id , stored_name , operations.amount , operations.date , operations.paid , operations.returned , operations.updated_date , operations.income , TrueIncome(operation_id) true_income , operations.worker_id , operations.stored_worker_name , operations.notes From skytech.operations LEFT join skytech.items on items.item_id = operations.item_id");
 		sql.append(filterDate);
 		
+		StringBuilder totalIncomeSQL = new StringBuilder("SELECT SUM(TrueIncome(operation_id)) AS total_income FROM skytech.items Right JOIN skytech.operations ON items.item_id = operations.item_id");
+		totalIncomeSQL.append(filterDate);
+		
 		setLastSQL(sql.toString());
+		setLastTotalIncomeSQL(totalIncomeSQL.toString());
 		
 		Statement statement = database.getCon().createStatement();
 		ResultSet results = statement.executeQuery(sql.toString());
@@ -150,6 +158,9 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 			operations.add(new Operation(operationId, itemSold, date, amount, paid, returned, updatedDate, income, trueIncome, workerId, storedWorkerName, notes));
 		}
 		
+		fireTableDataChanged();
+		refreshIncomeTextField();
+		
 		results.close();
 		statement.close();
 	}
@@ -163,6 +174,8 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 		fireTableRowsDeleted(operationRowNumber, operationRowNumber);
 		
 		preparedStatement.close();
+		
+		refreshIncomeTextField();
 	}
 	
 	public void updateOperation(Operation operation, int operationRowNumber) throws SQLException {
@@ -202,6 +215,8 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 		results.close();
 		updateStatement.close();
 		selectStatement.close();
+		
+		refreshIncomeTextField();
 	}
 	
 	public void setLastSQL(String lastSQL) {
@@ -245,6 +260,21 @@ public class AllOperationsPanel_AllOperationsTableModel extends AbstractTableMod
 		
 		results.close();
 		statement.close();
+		
+		fireTableDataChanged();
+	}
+	
+	public void setLastTotalIncomeSQL(String lastTotalIncomeSQL) {
+		this.lastTotalIncomeSQL = lastTotalIncomeSQL;
+	}
+	
+	private void refreshIncomeTextField() throws SQLException {
+		PreparedStatement totalIncomePreparedStatement = database.getCon().prepareStatement(lastTotalIncomeSQL);
+		ResultSet totalIncomeResult = totalIncomePreparedStatement.executeQuery();
+		totalIncomeResult.next();
+		AllOperationsPanel_ManualPanel_IncomeTextField.setText(Double.toString(totalIncomeResult.getDouble("total_income")));
+		totalIncomeResult.close();
+		totalIncomePreparedStatement.close();
 	}
 	
 }

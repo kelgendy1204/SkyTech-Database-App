@@ -76,10 +76,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
 	
 	private static final long serialVersionUID = -2511859348897938551L;
 	private SpecialCharacterDispatcher specialCharacterDispatcher;
-	
 
-
-	
 	public NormalUserGUIFrame() {
         initComponents();
     }
@@ -129,9 +126,11 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         AllOperationsPanel_AllOperationsTablePanel = new javax.swing.JPanel();
         AllOperationsPanel_ManualPanel_SellerLabel = new JLabel();
         AllOperationPanel_ManualPanel_SellerComboBox = new JComboBox<Worker>();
+    	AllOperationsPanel_ManualPanel_IncomeLabel = new JLabel();
+    	AllOperationsPanel_ManualPanel_IncomeTextField = new JTextField();
         ScrollPane2 = new javax.swing.JScrollPane();
         AllOperationsPanel_AllOperationsTable = new javax.swing.JTable();
-        allOperationsPanel_AllOperationsTableModel = new AllOperationsPanel_AllOperationsTableModel(database);
+        allOperationsPanel_AllOperationsTableModel = new AllOperationsPanel_AllOperationsTableModel(database, AllOperationsPanel_ManualPanel_IncomeTextField);
         allOperationsPanel_ManualPanel_ViewButtonListener = new AllOperationsPanel_ManualPanel_ViewButtonListener(this, AllOperationsPanel_AllOperationsTablePanel, allOperationsPanel_AllOperationsTableModel, AllOperationsPanel_ManualPanel_MonthComboBox, AllOperationsPanel_ManualPanel_DaySpinner, AllOperationsPanel_ManualPanel_YearSpinner, AllOperationPanel_ManualPanel_SellerComboBox);
         operations_SortByListener = new Operations_SortByListener(this, TabbedPane, getDailyOperationsPanel_DailyOperationsTableModel(), allOperationsPanel_AllOperationsTableModel, getDailyOperationPanel_DailyOperationTable(), AllOperationsPanel_AllOperationsTable);
         ItemsPanel = new javax.swing.JPanel();
@@ -483,6 +482,26 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 15);
         AllOperationsPanel_ManualPanel.add(AllOperationsPanel_ManualPanel_ViewButton, gridBagConstraints);
+        
+        AllOperationsPanel_ManualPanel_IncomeLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        AllOperationsPanel_ManualPanel_IncomeLabel.setText("Total income :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, horizontalSpacesBetweenLines, 5, 5);
+        AllOperationsPanel_ManualPanel.add(AllOperationsPanel_ManualPanel_IncomeLabel, gridBagConstraints);
+
+        AllOperationsPanel_ManualPanel_IncomeTextField.setEditable(false);
+        AllOperationsPanel_ManualPanel_IncomeTextField.setText(Double.toString(0));
+        AllOperationsPanel_ManualPanel_IncomeTextField.setColumns(8);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 11;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        AllOperationsPanel_ManualPanel.add(AllOperationsPanel_ManualPanel_IncomeTextField, gridBagConstraints);
+
+        TextFieldAndComboBoxHandeler.setCenterAlignmentForTextField(AllOperationsPanel_ManualPanel_IncomeTextField);
+        
 
         AllOperationsPanel_AllOperationsTablePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Date", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
@@ -542,7 +561,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         AllOperationsPanelLayout.setVerticalGroup(
             AllOperationsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(AllOperationsPanelLayout.createSequentialGroup()
-                .addComponent(AllOperationsPanel_ManualPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(AllOperationsPanel_ManualPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(AllOperationsPanel_AllOperationsTablePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -961,6 +980,8 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
     private JLabel AllOperationsPanel_ManualPanel_SellerLabel;
     private JComboBox<Worker> AllOperationPanel_ManualPanel_SellerComboBox;
     private AllOperationsPanel_ManualPanel_ViewButtonListener allOperationsPanel_ManualPanel_ViewButtonListener;
+	private JLabel AllOperationsPanel_ManualPanel_IncomeLabel;
+	private JTextField AllOperationsPanel_ManualPanel_IncomeTextField;
     private javax.swing.JPanel DailyOperationPanel;
     private javax.swing.JTable DailyOperationPanel_DailyOperationTable;
     private DailyOperationsPanel_DailyOperationsTableModel dailyOperationsPanel_DailyOperationsTableModel;
