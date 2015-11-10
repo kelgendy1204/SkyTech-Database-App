@@ -71,7 +71,13 @@ public class DailyOperationsPanel_AddOperationButtonListener implements
 		boolean isPaid = DailyOperationPanel_ManualPanel_PaidRadioButton.isSelected();
 		boolean isReturned = DailyOperationPanel_ManualPanel_ReturnedRadioButton.isSelected();
 		String notes = DailyOperationPanel_ManualPanel_NotesTextField.getText();
-		int workerId = ((Worker) DailyOperationPanel_ManualPanel_SellerComboBox.getSelectedItem()).getWorkerId();
+		int workerId;
+		
+		if(DailyOperationPanel_ManualPanel_SellerComboBox.getSelectedItem() != null) {
+			workerId = ((Worker) DailyOperationPanel_ManualPanel_SellerComboBox.getSelectedItem()).getWorkerId();
+		} else {
+			workerId = -1;
+		}
 		
 		try {
 			dailyOperationsPanel_DailyOperationsTableModel.addOperationToDatabase(item, amount, isPaid, isReturned, income, workerId, notes);
