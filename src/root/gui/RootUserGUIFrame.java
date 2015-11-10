@@ -717,6 +717,8 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         	}
 		});
         TextFieldAndComboBoxHandeler.orientationHandeler(ToolBar_ItemTextField);
+        TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(ToolBar_ItemTextField);
+        TextFieldAndComboBoxHandeler.setCenterAlignmentForTextField(ToolBar_ItemTextField);
 //////////////////////////////////////////////////////////////////////////////////  
 
         

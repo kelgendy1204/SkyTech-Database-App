@@ -665,6 +665,8 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         	}
 		});
         TextFieldAndComboBoxHandeler.orientationHandeler(ToolBar_ItemTextField);
+        TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(ToolBar_ItemTextField);
+        TextFieldAndComboBoxHandeler.setCenterAlignmentForTextField(ToolBar_ItemTextField);
 ////////////////////////////////////////////////////////////////////////////////////////////////        
 
         FileMenu.setText("File");
