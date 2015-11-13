@@ -304,6 +304,12 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(Panel2, gridBagConstraints);
+        
+        TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(AmountTextField);
+        TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(BuyingPriceTextField);
+        TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(ItemTextField);
+        TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(NotesTextField);
+        TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(SellingPriceTextField);
 
         pack();
     }// </editor-fold>     

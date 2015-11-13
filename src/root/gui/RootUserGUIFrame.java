@@ -929,7 +929,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
     
     
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	private void loadSellerComboBox() {
+	public void loadSellerComboBox() {
 		try {
 			ProfitsPanel_ManualPanel_SellerComboBox.setModel(new javax.swing.DefaultComboBoxModel(getAllSellers()));
 			OperationsPanel_ManualPanel_SellerComboBox.setModel(new javax.swing.DefaultComboBoxModel(getAllSellers()));

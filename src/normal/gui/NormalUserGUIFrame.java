@@ -359,6 +359,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
         TextFieldAndComboBoxHandeler.orientationHandeler((JComponent) DailyOperationPanel_ManualPanel_ItemsComboBox.getEditor().getEditorComponent());
         
         DailyOperationPanel_ManualPanel_NotesTextField.addKeyListener(DailyOperationPanel_ManualPanel_AmountTextField.getKeyListeners()[DailyOperationPanel_ManualPanel_AmountTextField.getKeyListeners().length - 1]);
+        DailyOperationPanel_ManualPanel_SellerComboBox.addKeyListener(DailyOperationPanel_ManualPanel_AmountTextField.getKeyListeners()[DailyOperationPanel_ManualPanel_AmountTextField.getKeyListeners().length - 1]);
         TextFieldAndComboBoxHandeler.orientationHandeler(DailyOperationPanel_ManualPanel_NotesTextField);
         
         DailyOperationPanel_ManualPanel_PaidRadioButton.addKeyListener(DailyOperationPanel_ManualPanel_AmountTextField.getKeyListeners()[DailyOperationPanel_ManualPanel_AmountTextField.getKeyListeners().length - 1]);
@@ -791,7 +792,7 @@ public class NormalUserGUIFrame extends javax.swing.JFrame {
     }
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void loadSellerComboBox() {
+	public void loadSellerComboBox() {
 		try {
 			DailyOperationPanel_ManualPanel_SellerComboBox.setModel(new javax.swing.DefaultComboBoxModel(getAllSellers()));
 			AllOperationPanel_ManualPanel_SellerComboBox.setModel(new javax.swing.DefaultComboBoxModel(getAllSellers()));

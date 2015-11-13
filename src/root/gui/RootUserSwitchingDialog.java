@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 
 import logic.SpecialCharacterDispatcher;
+import logic.TextFieldAndComboBoxHandeler;
 
 public class RootUserSwitchingDialog extends javax.swing.JDialog {
 
@@ -116,6 +117,9 @@ public class RootUserSwitchingDialog extends javax.swing.JDialog {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
         getContentPane().add(jPanel1, gridBagConstraints);
+        
+        TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(UsernameTextField);
+        TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(PasswordField);
 
         pack();
         

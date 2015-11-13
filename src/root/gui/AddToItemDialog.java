@@ -157,6 +157,9 @@ public class AddToItemDialog extends javax.swing.JDialog {
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         getContentPane().add(Panel2, gridBagConstraints);
+        
+        TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(addedAmountTextField);
+        TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(totalCostTextField);
 
         pack();
     } 

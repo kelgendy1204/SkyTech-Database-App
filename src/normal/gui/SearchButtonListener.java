@@ -68,10 +68,10 @@ public class SearchButtonListener implements ActionListener {
 	}
 
 	public void startSearching() {
-		if(ToolBar_ItemTextField.getText().equals("")) {
+		if(ToolBar_ItemTextField.getText().trim().equals("")) {
 			return;
 		}
-		searchItem(ToolBar_ItemTextField.getText());
+		searchItem(ToolBar_ItemTextField.getText().trim());
 	}
 
 	public void viewAllOperations(String search){

@@ -87,7 +87,7 @@ public class RootSearchButtonListener implements ActionListener {
 	}
 
 	public void startSearching() {
-		if(ToolBar_ItemTextField.getText().equals("")) {
+		if(ToolBar_ItemTextField.getText().trim().equals("")) {
 			return;
 		}
 		searchItem();
@@ -158,18 +158,18 @@ public class RootSearchButtonListener implements ActionListener {
 	}
 
 	private void searchItem() {
-		
+		String search = ToolBar_ItemTextField.getText().trim();
 		switch (TabbedPane.getSelectedIndex()) {
 		case 0:
-			rootItemsPanel_ManualPanel_ViewButtonListener.viewAllItems(ToolBar_ItemTextField.getText());
+			rootItemsPanel_ManualPanel_ViewButtonListener.viewAllItems(search);
 			break;
 
 		case 1:
-			viewProfits(ToolBar_ItemTextField.getText());
+			viewProfits(search);
 			break;
 
 		default:
-			viewOperations(ToolBar_ItemTextField.getText());
+			viewOperations(search);
 			break;
 		}
 	}
