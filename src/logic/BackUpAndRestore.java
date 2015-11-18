@@ -21,7 +21,7 @@ import root.gui.RootUserGUIFrame;
 
 public class BackUpAndRestore {
 	
-	private static final String firstCommand = "cmd /c cd C:\\Program Files\\MySQL\\MySQL Server 5.6\\bin";
+	private static final String firstCommand = "cmd /c cd C:\\Program Files\\MySQL\\MySQL Server 5.6\\bin" + "&&C:";
 	private WaitingDialog waitingDialog;
 	private JFrame parent;
 	private LoadSaveFileListener loadSaveFileListener;
