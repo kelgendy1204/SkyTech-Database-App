@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-class InputStreamToFile {
+public class InputStreamToFile {
 	private InputStream inputStream;
 	private String filePath;
 	
