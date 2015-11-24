@@ -154,11 +154,19 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		PreparedStatement preparedStatement = database.getCon().prepareStatement(sql);
 		preparedStatement.setInt(1, item.getItemId());
 		preparedStatement.executeUpdate();
-		double availableCapital = items.get(itemRowNumber).getAvailableCapital();
-		items.remove(itemRowNumber);
-		fireTableRowsDeleted(itemRowNumber, itemRowNumber);
-		preparedStatement.close();
+		double availableCapital = item.getAvailableCapital();		
 		
+		//double availableCapital = items.get(itemRowNumber).getAvailableCapital();
+		
+		if (itemRowNumber == UndoRedoRootItems.UNKNOWN_ITEM_ROW_NUMBER) {
+			items.remove(item);
+			fireTableDataChanged();
+		} else {
+			items.remove(itemRowNumber);
+			fireTableRowsDeleted(itemRowNumber, itemRowNumber);
+		}
+		
+		preparedStatement.close();
 		double totalCapitalBeforeDelete = Double.parseDouble(ItemsPanel_ManualPanel_CapitalTextField.getText());
 		double totalCapitalAfterDelete = Double.parseDouble(NumbersHandling.decimalFormat.format(totalCapitalBeforeDelete - availableCapital));
 		ItemsPanel_ManualPanel_CapitalTextField.setText(Double.toString(totalCapitalAfterDelete));
@@ -186,7 +194,13 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		
 		results.next();
 
-		RootItem itemUpdated = items.get(itemRowNumber);
+		RootItem itemUpdated;
+		
+		if (itemRowNumber == UndoRedoRootItems.UNKNOWN_ITEM_ROW_NUMBER) {
+			itemUpdated = item;
+		} else {
+			itemUpdated = items.get(itemRowNumber);			
+		}
 		
 		double oldAvailableCapital = itemUpdated.getAvailableCapital();
 		
@@ -208,7 +222,11 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		itemUpdated.setAvailableCapital(availableCapital);
 		itemUpdated.setNotes(notes);
 		
-		fireTableRowsUpdated(itemRowNumber, itemRowNumber);
+		if (itemRowNumber == UndoRedoRootItems.UNKNOWN_ITEM_ROW_NUMBER) {
+			fireTableDataChanged();
+		} else {
+			fireTableRowsUpdated(itemRowNumber, itemRowNumber);			
+		}
 		
 		results.close();
 		updateStatement.close();

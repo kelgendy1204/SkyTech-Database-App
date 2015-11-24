@@ -1,70 +1,124 @@
 package root.gui.itemspanel;
 
-import global.Database;
+import global.gui.ErrorMessage;
+
+import java.sql.SQLException;
+
+import javax.swing.JFrame;
+
 import logic.SizedStack;
 
 public class UndoRedoRootItems {
 
-	private SizedStack<OldRootItem> undoRootItems = new SizedStack<OldRootItem>(20);
-	private SizedStack<OldRootItem> redoRootItems = new SizedStack<OldRootItem>(20);
-	private Database database;
+	public static final int UNKNOWN_ITEM_ROW_NUMBER = -5363;
+	private JFrame parent;
+	private SizedStack<VersionedRootItem> undoRootItems = new SizedStack<VersionedRootItem>(20);
+	private SizedStack<VersionedRootItem> redoRootItems = new SizedStack<VersionedRootItem>(20);
 	private RootItemPanelTableModel rootItemPanelTableModel;
 
-	public UndoRedoRootItems(Database database, RootItemPanelTableModel rootItemPanelTableModel) {
-		this.database = database;
+	public UndoRedoRootItems(JFrame parent, RootItemPanelTableModel rootItemPanelTableModel) {
+		this.parent = parent;
 		this.rootItemPanelTableModel = rootItemPanelTableModel;
 	}
-	
-	public void addOldItemToHistory(OldRootItem oldRootItem) {
-		undoRootItems.push(oldRootItem);
 
+	public void addOldItemToHistory(VersionedRootItem versionedRootItem) {
+		undoRootItems.push(versionedRootItem);
+		redoRootItems.clear();
 	}
 
 	public void undo() {
-		OldRootItem oldRootItem = undoRootItems.pop();
-		redoRootItems.push(oldRootItem);
-		doAction(oldRootItem);
+		VersionedRootItem versionedRootItem = undoRootItems.pop();
+		redoRootItems.push(versionedRootItem);
+		undoAction(versionedRootItem);
 	}
 
 	public void redo() {
-		OldRootItem oldRootItem = redoRootItems.pop();
-		undoRootItems.push(oldRootItem);
-		doAction(oldRootItem);
+		VersionedRootItem versionedRootItem = redoRootItems.pop();
+		undoRootItems.push(versionedRootItem);
+		redoAction(versionedRootItem);
 	}
 
-	private void doAction(OldRootItem oldRootItem) {
-		switch (oldRootItem.getType()) {
-		
-		case OldRootItem.INSERTED:
-			redoInsertSql(oldRootItem);
+	private void redoAction(VersionedRootItem versionedRootItem) {
+		switch (versionedRootItem.getType()) {
+
+		case VersionedRootItem.INSERTED:
+
+			try {
+				rootItemPanelTableModel.insertItemToDatabase(versionedRootItem.getName(), versionedRootItem.getSellingPrice(), versionedRootItem.getBuyingPrice(), versionedRootItem.getAmount(), versionedRootItem.getCategory(), versionedRootItem.getNotes());
+			} catch (SQLException e) {
+				ErrorMessage.showErrorMessage(parent, e.getMessage());
+				e.printStackTrace();
+			}
+
 			break;
 
-		case OldRootItem.UPDATED:
-			redoUpdateSql(oldRootItem);
+		case VersionedRootItem.UPDATED:
+
+			try {
+				rootItemPanelTableModel.deleteItem(versionedRootItem.getNewRootItemUpdatedValues(), UNKNOWN_ITEM_ROW_NUMBER);
+			} catch (SQLException e) {
+				ErrorMessage.showErrorMessage(parent, e.getMessage());
+				e.printStackTrace();
+			}
+
 			break;
+
+		case VersionedRootItem.DELETED:
+
+			try {
+				rootItemPanelTableModel.deleteItem(versionedRootItem, UNKNOWN_ITEM_ROW_NUMBER);
+			} catch (SQLException e) {
+				ErrorMessage.showErrorMessage(parent, e.getMessage());
+				e.printStackTrace();
+			}
 			
-		case OldRootItem.DELETED:
-			redoDeleteSql(oldRootItem);
 			break;
-			
+
 		default:
 			break;
 		}
-		
 	}
 
-	private void redoDeleteSql(OldRootItem oldRootItem) {
-		// TODO Auto-generated method stub
-		
+	private void undoAction(VersionedRootItem versionedRootItem) {
+		switch (versionedRootItem.getType()) {
+
+		case VersionedRootItem.INSERTED:
+
+			try {
+				rootItemPanelTableModel.deleteItem(versionedRootItem, UNKNOWN_ITEM_ROW_NUMBER);
+			} catch (SQLException e) {
+				ErrorMessage.showErrorMessage(parent, e.getMessage());
+				e.printStackTrace();
+			}
+
+			break;
+
+		case VersionedRootItem.UPDATED:
+
+			try {
+				rootItemPanelTableModel.updateItem(versionedRootItem, UNKNOWN_ITEM_ROW_NUMBER);
+			} catch (SQLException e1) {
+				ErrorMessage.showErrorMessage(parent, e1.getMessage());
+				e1.printStackTrace();
+			}
+
+			break;
+
+		case VersionedRootItem.DELETED:
+
+			try {
+				rootItemPanelTableModel.insertItemToDatabase(versionedRootItem.getName(), versionedRootItem.getSellingPrice(), versionedRootItem.getBuyingPrice(), versionedRootItem.getAmount(), versionedRootItem.getCategory(), versionedRootItem.getNotes());
+			} catch (SQLException e) {
+				ErrorMessage.showErrorMessage(parent, e.getMessage());
+				e.printStackTrace();
+			}
+
+			break;
+
+		default:
+			break;
+		}
+
 	}
 
-	private void redoUpdateSql(OldRootItem oldRootItem) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void redoInsertSql(OldRootItem oldRootItem) {
-		// TODO Auto-generated method stub
-		
-	}
 }

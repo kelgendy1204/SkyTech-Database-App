@@ -7,11 +7,11 @@ import normal.gui.itemspanel.Item;
 
 public class RootItem extends Item {
 
-	private double sellingPrice;
-	private Timestamp createdAt;
-	private Timestamp updatedAt;
-	private String notes;
-	private double availableCapital;
+	protected double sellingPrice;
+	protected Timestamp createdAt;
+	protected Timestamp updatedAt;
+	protected String notes;
+	protected double availableCapital;
 	
 	public RootItem(int itemId, String name, double buyingPrice, int amount,
 			Category category, double sellingPrice, Timestamp createdAt, Timestamp updatedAt, 
