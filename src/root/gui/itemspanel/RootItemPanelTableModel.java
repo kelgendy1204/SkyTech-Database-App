@@ -159,7 +159,11 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		//double availableCapital = items.get(itemRowNumber).getAvailableCapital();
 		
 		if (itemRowNumber == UndoRedoRootItems.UNKNOWN_ITEM_ROW_NUMBER) {
-			items.remove(item);
+			try {
+				items.remove(item);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			fireTableDataChanged();
 		} else {
 			items.remove(itemRowNumber);
@@ -197,7 +201,7 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		RootItem itemUpdated;
 		
 		if (itemRowNumber == UndoRedoRootItems.UNKNOWN_ITEM_ROW_NUMBER) {
-			itemUpdated = item;
+			itemUpdated = items.get(items.indexOf(item));
 		} else {
 			itemUpdated = items.get(itemRowNumber);			
 		}
