@@ -14,6 +14,7 @@ import logic.NumbersHandling;
 import logic.TextFieldAndComboBoxHandeler;
 import root.gui.itemspanel.RootItem;
 import root.gui.itemspanel.RootItemPanelTableModel;
+import root.gui.itemspanel.UndoRedoRootItems;
 
 public class AddToItemDialog extends javax.swing.JDialog {
 
@@ -25,19 +26,21 @@ public class AddToItemDialog extends javax.swing.JDialog {
 	private boolean isTotalCostAdded;
 	private int overallAmount;
 	private double newSellingPrice;
+	private UndoRedoRootItems undoRedoRootItems;
 	
 	public AddToItemDialog(java.awt.Frame parent, boolean modal) {
 		super(parent, modal);
 		initComponents();
 	}
 
-	public AddToItemDialog(java.awt.Frame parent,  RootItemPanelTableModel rootItemPanelTableModel, JTable ItemsPanel_ItemsTable) throws ArrayIndexOutOfBoundsException{
+	public AddToItemDialog(java.awt.Frame parent,  RootItemPanelTableModel rootItemPanelTableModel, JTable ItemsPanel_ItemsTable, UndoRedoRootItems undoRedoRootItems) throws ArrayIndexOutOfBoundsException{
 		super(parent, ModalityType.APPLICATION_MODAL);
 		initComponents();
 		
 		this.rootItemPanelTableModel = rootItemPanelTableModel;
 		this.ItemsPanel_ItemsTable = ItemsPanel_ItemsTable;
-
+		this.undoRedoRootItems = undoRedoRootItems;
+		
 		int itemRowNumber = this.ItemsPanel_ItemsTable.getSelectedRow();
 		RootItem itemEdited = this.rootItemPanelTableModel.items.get(itemRowNumber);		
 		addToItemTextField.setText(itemEdited.getName());

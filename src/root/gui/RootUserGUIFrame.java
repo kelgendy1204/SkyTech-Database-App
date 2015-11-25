@@ -51,6 +51,7 @@ import root.gui.itemspanel.ItemsPanel_ItemsTableMouseListener;
 import root.gui.itemspanel.RootItemPanelTableModel;
 import root.gui.itemspanel.RootItemSortByListener;
 import root.gui.itemspanel.RootItemsPanel_ManualPanel_ViewButtonListener;
+import root.gui.itemspanel.UndoRedoRootItems;
 import root.gui.operations.OperationsPanel_ViewButtonListener;
 import root.gui.operations.OperationsTableKeyListener;
 import root.gui.operations.OperationsTableMouseListener;
@@ -102,6 +103,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         rootItemPanelTableModel = new RootItemPanelTableModel(database, ItemsPanel_ManualPanel_CapitalTextField);
         rootItemsPanel_ManualPanel_ViewButtonListener = new RootItemsPanel_ManualPanel_ViewButtonListener(this, ItemsPanel_ItemsTablePanel, rootItemPanelTableModel, ItemsPanel_ManualPanel_CategoryComboBox);
         rootItemSortByListener = new RootItemSortByListener(this, rootItemPanelTableModel, ItemsPanel_ItemsTable);
+        undoRedoRootItems = new UndoRedoRootItems(this, rootItemPanelTableModel);
         ProfitsPanel = new javax.swing.JPanel();
         ProfitsPanel_ManualPanel = new javax.swing.JPanel();
         ProfitsPanel_ManualPanel_DateOfOperationsLabel = new javax.swing.JLabel();
@@ -893,7 +895,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
     }
 
     private void addRootItem() {
-		AddEditItemsDialog addEditItemsDialog = new AddEditItemsDialog(RootUserGUIFrame.this, "add", null, 0, rootItemPanelTableModel, ItemsPanel_ItemsTable);
+		AddEditItemsDialog addEditItemsDialog = new AddEditItemsDialog(RootUserGUIFrame.this, "add", null, 0, rootItemPanelTableModel, ItemsPanel_ItemsTable, undoRedoRootItems);
         Dimension dimension = RootUserGUIFrame.this.getSize();
         addEditItemsDialog.setLocation(dimension.width/2-addEditItemsDialog.getSize().width/2, dimension.height/2-addEditItemsDialog.getSize().height/2);
         addEditItemsDialog.setVisible(true);
@@ -902,7 +904,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
     private void addAmountToRootItem() {
 		AddToItemDialog addToItemDialog;
 		try {
-			addToItemDialog = new AddToItemDialog(RootUserGUIFrame.this, rootItemPanelTableModel, ItemsPanel_ItemsTable);
+			addToItemDialog = new AddToItemDialog(RootUserGUIFrame.this, rootItemPanelTableModel, ItemsPanel_ItemsTable, undoRedoRootItems);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			ErrorMessage.showErrorMessage(RootUserGUIFrame.this, e.getMessage());
 			e.printStackTrace();
@@ -1053,6 +1055,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         });
     }
 
+    private UndoRedoRootItems undoRedoRootItems;
     private BackUpAndRestore backUpAndRestore;
     private Database database;
     private javax.swing.JMenu FileMenu;

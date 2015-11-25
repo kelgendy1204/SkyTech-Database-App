@@ -15,6 +15,8 @@ import logic.NumbersHandling;
 import logic.TextFieldAndComboBoxHandeler;
 import root.gui.itemspanel.RootItem;
 import root.gui.itemspanel.RootItemPanelTableModel;
+import root.gui.itemspanel.UndoRedoRootItems;
+import root.gui.itemspanel.VersionedRootItem;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -32,6 +34,7 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 7860990737579055768L;
+	private UndoRedoRootItems undoRedoRootItems;
 	/**
 	 * Creates new form AddEditItemsDialog
 	 */
@@ -40,11 +43,12 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
 		initComponents();
 	}
 
-	public AddEditItemsDialog(java.awt.Frame parent, String addOrEdit, RootItem itemEdited, int itemRowNumber, RootItemPanelTableModel rootItemPanelTableModel, JTable ItemsPanel_ItemsTable) {
+	public AddEditItemsDialog(java.awt.Frame parent, String addOrEdit, RootItem itemEdited, int itemRowNumber, RootItemPanelTableModel rootItemPanelTableModel, JTable ItemsPanel_ItemsTable, UndoRedoRootItems undoRedoRootItems) {
 		super(parent, ModalityType.APPLICATION_MODAL);
 		initComponents();
 		this.rootItemPanelTableModel = rootItemPanelTableModel;
 		this.ItemsPanel_ItemsTable = ItemsPanel_ItemsTable;
+		this.undoRedoRootItems = undoRedoRootItems;
 
 		switch (addOrEdit) {
 		case "add":
@@ -89,13 +93,7 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
 			DeleteButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					try {
-						AddEditItemsDialog.this.rootItemPanelTableModel.deleteItem(itemEdited, itemRowNumber);
-						AddEditItemsDialog.this.dispose();
-					} catch (SQLException e) {
-						ErrorMessage.showErrorMessage(AddEditItemsDialog.this, e.getMessage());
-						e.printStackTrace();
-					}
+					deleteItem(itemEdited, itemRowNumber);
 				}
 			});
 
@@ -315,6 +313,10 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
     }// </editor-fold>     
 	
 	private void updateItem(RootItem itemEdited, int itemRowNumber) {
+		
+		VersionedRootItem versionedRootItem = (VersionedRootItem) itemEdited;
+		versionedRootItem.setType(VersionedRootItem.UPDATED);
+		
 		int amount;
 		if (NumbersHandling.isInteger(AmountTextField.getText())) {
 			amount = Integer.parseInt(AmountTextField.getText());
@@ -350,12 +352,16 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
 		itemEdited.setCategory(category);
 
 		try {
-			AddEditItemsDialog.this.rootItemPanelTableModel.updateItem(itemEdited, itemRowNumber);
+			RootItem newRootItem = AddEditItemsDialog.this.rootItemPanelTableModel.updateItem(itemEdited, itemRowNumber);
+			versionedRootItem.initializeNewUpdatedDataItem(newRootItem.getSellingPrice(), newRootItem.getNotes(), newRootItem.getName(), newRootItem.getBuyingPrice(), newRootItem.getAmount(), newRootItem.getCategory(), newRootItem.getCreatedAt(), newRootItem.getUpdatedAt(), newRootItem.getAvailableCapital());
+			undoRedoRootItems.addOldItemToHistory(versionedRootItem);
+			
 			AddEditItemsDialog.this.dispose();
 		} catch (SQLException e1) {
 			ErrorMessage.showErrorMessage(this, e1.getMessage());
 			e1.printStackTrace();
 		}
+		
 	}
 
 	private void insertItem() {
@@ -387,7 +393,10 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
 		Category category = Category.valueOf(CategoryComboBox.getSelectedItem().toString());
 
 		try {
-			AddEditItemsDialog.this.rootItemPanelTableModel.insertItemToDatabase(name, sellingPrice, buyingPrice, amount, category, notes);
+			VersionedRootItem versionedRootItem = (VersionedRootItem) AddEditItemsDialog.this.rootItemPanelTableModel.insertItemToDatabase(name, sellingPrice, buyingPrice, amount, category, notes);
+			versionedRootItem.setType(VersionedRootItem.INSERTED);
+			undoRedoRootItems.addOldItemToHistory(versionedRootItem);
+			
 			AddEditItemsDialog.this.ItemsPanel_ItemsTable.scrollRectToVisible(AddEditItemsDialog.this.ItemsPanel_ItemsTable.getCellRect(AddEditItemsDialog.this.ItemsPanel_ItemsTable.getRowCount()-1, 0, true));
 			AddEditItemsDialog.this.dispose();
 		} catch (SQLException e1) {
@@ -396,15 +405,21 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
 		}
 	}
 	
-	/**
-	 * @param args the command line arguments
-	 */
+	private void deleteItem(RootItem itemEdited, int itemRowNumber) {
+		try {
+			AddEditItemsDialog.this.rootItemPanelTableModel.deleteItem(itemEdited, itemRowNumber);
+			VersionedRootItem versionedRootItem = (VersionedRootItem) itemEdited;
+			versionedRootItem.setType(VersionedRootItem.DELETED);
+			undoRedoRootItems.addOldItemToHistory(versionedRootItem);
+			
+			AddEditItemsDialog.this.dispose();
+		} catch (SQLException e) {
+			ErrorMessage.showErrorMessage(AddEditItemsDialog.this, e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
 	public static void main(String args[]) {
-		/* Set the Nimbus look and feel */
-		//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-		/* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-		 * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-		 */
 		try {
 			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {
@@ -421,9 +436,7 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
 		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
 			java.util.logging.Logger.getLogger(AddEditItemsDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		}
-		//</editor-fold>
 
-		/* Create and display the dialog */
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				AddEditItemsDialog dialog = new AddEditItemsDialog(new javax.swing.JFrame(), true);
@@ -438,7 +451,6 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
 		});
 	}
 
-	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private JTable ItemsPanel_ItemsTable;
 	private RootItemPanelTableModel rootItemPanelTableModel;
 	private javax.swing.JLabel AmountLabel;
@@ -458,5 +470,4 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
 	private javax.swing.JLabel SellingPriceLabel;
 	private javax.swing.JTextField SellingPriceTextField;
 	private javax.swing.JButton UpdateButton;
-	// End of variables declaration//GEN-END:variables
 }

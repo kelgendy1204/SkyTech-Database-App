@@ -11,9 +11,10 @@ import logic.SizedStack;
 public class UndoRedoRootItems {
 
 	public static final int UNKNOWN_ITEM_ROW_NUMBER = -5363;
+	private static final int UNDOHISTORYSIZE = 20;
 	private JFrame parent;
-	private SizedStack<VersionedRootItem> undoRootItems = new SizedStack<VersionedRootItem>(20);
-	private SizedStack<VersionedRootItem> redoRootItems = new SizedStack<VersionedRootItem>(20);
+	private SizedStack<VersionedRootItem> undoRootItems = new SizedStack<VersionedRootItem>(UNDOHISTORYSIZE);
+	private SizedStack<VersionedRootItem> redoRootItems = new SizedStack<VersionedRootItem>(UNDOHISTORYSIZE);
 	private RootItemPanelTableModel rootItemPanelTableModel;
 
 	public UndoRedoRootItems(JFrame parent, RootItemPanelTableModel rootItemPanelTableModel) {

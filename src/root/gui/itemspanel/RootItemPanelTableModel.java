@@ -177,7 +177,7 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		
 	}
 	
-	public void updateItem(RootItem item, int itemRowNumber) throws SQLException {
+	public RootItem updateItem(RootItem item, int itemRowNumber) throws SQLException {
 		String sql = ("UPDATE skytech.items SET name = ?, selling_price = ?, buying_price = ?, amount = ? , category = ? , notes = ? WHERE item_id = ?" );
 		PreparedStatement updateStatement = database.getCon().prepareStatement(sql);
 		
@@ -240,9 +240,11 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		double totalCapitalAfterUpdate = Double.parseDouble(NumbersHandling.decimalFormat.format(totalCapitalBeforeUpdate - oldAvailableCapital + availableCapital));
 		ItemsPanel_ManualPanel_CapitalTextField.setText(Double.toString(totalCapitalAfterUpdate));
 		
+		return itemUpdated;
+		
 	}
 	
-	public void insertItemToDatabase(String name, double sellingPrice, double buyingPrice, int amount, Category category, String notes) throws SQLException{
+	public RootItem insertItemToDatabase(String name, double sellingPrice, double buyingPrice, int amount, Category category, String notes) throws SQLException{
 		String sql = "INSERT INTO skytech.items (name, selling_price, buying_price, amount, category, notes) VALUES (?, ?, ?, ?, ?, ?)";
 		PreparedStatement insertStatement = database.getCon().prepareStatement(sql);
 		insertStatement.setString(1, name);
@@ -262,7 +264,9 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		Timestamp updatedAt = results.getTimestamp("updated_at");
 		double availableCapital = results.getDouble("available_capital");
 		
-		items.add(new RootItem(itemId, name, buyingPrice, amount, category, sellingPrice, createdAt, updatedAt, availableCapital, notes));
+		RootItem rootItem = new RootItem(itemId, name, buyingPrice, amount, category, sellingPrice, createdAt, updatedAt, availableCapital, notes);
+		
+		items.add(rootItem);
 		
 		fireTableRowsInserted(items.size() - 1, items.size() - 1);
 		
@@ -273,6 +277,8 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		results.close();
 		selectInsertedStatement.close();
 		insertStatement.close();
+		
+		return rootItem;
 	}
 
 	public void setLastSQL(String lastSQL) {
