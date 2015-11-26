@@ -151,6 +151,7 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 	
 	public void deleteItem(RootItem item, int itemRowNumber) throws SQLException {
 		String sql = ("DELETE FROM skytech.items WHERE item_id = ?" );
+		
 		PreparedStatement preparedStatement = database.getCon().prepareStatement(sql);
 		preparedStatement.setInt(1, item.getItemId());
 		preparedStatement.executeUpdate();
@@ -161,6 +162,8 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		if (itemRowNumber == UndoRedoRootItems.UNKNOWN_ITEM_ROW_NUMBER) {
 			try {
 				items.remove(item);
+				//// implement array list contain method 
+				//// or implement equals and hashcode in rootitem
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -276,6 +279,36 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		
 		results.close();
 		selectInsertedStatement.close();
+		insertStatement.close();
+		
+		return rootItem;
+	}
+	
+	public RootItem insertItemToDatabaseWithSpecificValues(String name, double sellingPrice, double buyingPrice, int amount, Category category, String notes, int itemId, Timestamp createdAt, Timestamp updatedAt, double availableCapital) throws SQLException{
+		String sql = "INSERT INTO skytech.items (name, selling_price, buying_price, amount, category, notes, item_id, created_at, updated_at, available_capital) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		PreparedStatement insertStatement = database.getCon().prepareStatement(sql);
+		insertStatement.setString(1, name);
+		insertStatement.setDouble(2, sellingPrice);
+		insertStatement.setDouble(3, buyingPrice);
+		insertStatement.setInt(4, amount);
+		insertStatement.setString(5, category.toString());
+		insertStatement.setString(6, notes);
+		insertStatement.setInt(7, itemId);
+		insertStatement.setTimestamp(8, createdAt);
+		insertStatement.setTimestamp(9, updatedAt);
+		insertStatement.setDouble(10, availableCapital);
+		insertStatement.executeUpdate();
+
+		RootItem rootItem = new RootItem(itemId, name, buyingPrice, amount, category, sellingPrice, createdAt, updatedAt, availableCapital, notes);
+		
+		items.add(rootItem);
+		
+		fireTableRowsInserted(items.size() - 1, items.size() - 1);
+		
+		double totalCapitalBeforeInsert = Double.parseDouble(ItemsPanel_ManualPanel_CapitalTextField.getText());
+		double totalCapitalAfterInsert = Double.parseDouble(NumbersHandling.decimalFormat.format(totalCapitalBeforeInsert + availableCapital));
+		ItemsPanel_ManualPanel_CapitalTextField.setText(Double.toString(totalCapitalAfterInsert));
+		
 		insertStatement.close();
 		
 		return rootItem;

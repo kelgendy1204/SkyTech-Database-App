@@ -22,12 +22,11 @@ public class VersionedRootItem extends RootItem {
 	private Timestamp newUpdatedAt;
 	private double newAvailableCapital;
 	
-	public VersionedRootItem(int itemId, String name, double buyingPrice,
-			int amount, Category category, double sellingPrice,
-			Timestamp createdAt, Timestamp updatedAt, double availableCapital,
-			String notes, int type) {
-		super(itemId, name, buyingPrice, amount, category, sellingPrice, createdAt,
-				updatedAt, availableCapital, notes);
+	public VersionedRootItem(RootItem rootItem, int type) {
+		super(rootItem.getItemId(), rootItem.getName(), rootItem.getBuyingPrice(), 
+				rootItem.getAmount(), rootItem.getCategory(), rootItem.getSellingPrice(), 
+				rootItem.getCreatedAt(), rootItem.getUpdatedAt(), rootItem.getAvailableCapital(), 
+				rootItem.getNotes());
 		this.type = type;
 	}
 	

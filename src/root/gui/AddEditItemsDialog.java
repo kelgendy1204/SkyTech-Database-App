@@ -314,8 +314,7 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
 	
 	private void updateItem(RootItem itemEdited, int itemRowNumber) {
 		
-		VersionedRootItem versionedRootItem = (VersionedRootItem) itemEdited;
-		versionedRootItem.setType(VersionedRootItem.UPDATED);
+		VersionedRootItem versionedRootItem = new VersionedRootItem(itemEdited, VersionedRootItem.UPDATED);
 		
 		int amount;
 		if (NumbersHandling.isInteger(AmountTextField.getText())) {
@@ -396,8 +395,8 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
 		Category category = Category.valueOf(CategoryComboBox.getSelectedItem().toString());
 
 		try {
-			VersionedRootItem versionedRootItem = (VersionedRootItem) AddEditItemsDialog.this.rootItemPanelTableModel.insertItemToDatabase(name, sellingPrice, buyingPrice, amount, category, notes);
-			versionedRootItem.setType(VersionedRootItem.INSERTED);
+			RootItem rootItem = AddEditItemsDialog.this.rootItemPanelTableModel.insertItemToDatabase(name, sellingPrice, buyingPrice, amount, category, notes);
+			VersionedRootItem versionedRootItem = new VersionedRootItem(rootItem, VersionedRootItem.INSERTED);
 			undoRedoRootItems.addOldItemToHistory(versionedRootItem);
 			
 			AddEditItemsDialog.this.ItemsPanel_ItemsTable.scrollRectToVisible(AddEditItemsDialog.this.ItemsPanel_ItemsTable.getCellRect(AddEditItemsDialog.this.ItemsPanel_ItemsTable.getRowCount()-1, 0, true));
@@ -411,8 +410,7 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
 	private void deleteItem(RootItem itemEdited, int itemRowNumber) {
 		try {
 			AddEditItemsDialog.this.rootItemPanelTableModel.deleteItem(itemEdited, itemRowNumber);
-			VersionedRootItem versionedRootItem = (VersionedRootItem) itemEdited;
-			versionedRootItem.setType(VersionedRootItem.DELETED);
+			VersionedRootItem versionedRootItem = new VersionedRootItem(itemEdited, VersionedRootItem.DELETED) ;
 			undoRedoRootItems.addOldItemToHistory(versionedRootItem);
 			
 			AddEditItemsDialog.this.dispose();

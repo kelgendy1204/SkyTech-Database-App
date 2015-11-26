@@ -103,7 +103,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         rootItemPanelTableModel = new RootItemPanelTableModel(database, ItemsPanel_ManualPanel_CapitalTextField);
         rootItemsPanel_ManualPanel_ViewButtonListener = new RootItemsPanel_ManualPanel_ViewButtonListener(this, ItemsPanel_ItemsTablePanel, rootItemPanelTableModel, ItemsPanel_ManualPanel_CategoryComboBox);
         rootItemSortByListener = new RootItemSortByListener(this, rootItemPanelTableModel, ItemsPanel_ItemsTable);
-        undoRedoRootItems = new UndoRedoRootItems(this, rootItemPanelTableModel);
+        undoRedoRootItems = new UndoRedoRootItems(this, rootItemPanelTableModel, ItemsPanel_ItemsTable);
         ProfitsPanel = new javax.swing.JPanel();
         ProfitsPanel_ManualPanel = new javax.swing.JPanel();
         ProfitsPanel_ManualPanel_DateOfOperationsLabel = new javax.swing.JLabel();
@@ -320,6 +320,8 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         ItemsPanel_ItemsTable.addMouseListener(new ItemsPanel_ItemsTableMouseListener(this, rootItemPanelTableModel, ItemsPanel_ItemsTable, undoRedoRootItems));
         ItemsPanel_ItemsTable.getTableHeader().addMouseListener(rootItemSortByListener);
         ItemsPanel_ItemsTable.addKeyListener(new ItemsPanel_ItemsTableKeyListener(this, rootItemPanelTableModel, ItemsPanel_ItemsTable, undoRedoRootItems));
+        ItemsPanel_ManualPanel_UndoButton.addActionListener( (event) -> undoRedoRootItems.undo());
+        ItemsPanel_ManualPanel_RedoItemButton.addActionListener( (event) -> undoRedoRootItems.redo());
 ///////////////////////////////////////////////////////////////////////////////////////////////////       
         
         

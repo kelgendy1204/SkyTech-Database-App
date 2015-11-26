@@ -5,6 +5,7 @@ import global.gui.ErrorMessage;
 import java.sql.SQLException;
 
 import javax.swing.JFrame;
+import javax.swing.JTable;
 
 import logic.SizedStack;
 
@@ -16,10 +17,12 @@ public class UndoRedoRootItems {
 	private SizedStack<VersionedRootItem> undoRootItems = new SizedStack<VersionedRootItem>(UNDOHISTORYSIZE);
 	private SizedStack<VersionedRootItem> redoRootItems = new SizedStack<VersionedRootItem>(UNDOHISTORYSIZE);
 	private RootItemPanelTableModel rootItemPanelTableModel;
+	private JTable ItemsPanel_ItemsTable;
 
-	public UndoRedoRootItems(JFrame parent, RootItemPanelTableModel rootItemPanelTableModel) {
+	public UndoRedoRootItems(JFrame parent, RootItemPanelTableModel rootItemPanelTableModel, JTable ItemsPanel_ItemsTable) {
 		this.parent = parent;
 		this.rootItemPanelTableModel = rootItemPanelTableModel;
+		this.ItemsPanel_ItemsTable = ItemsPanel_ItemsTable;
 	}
 
 	public void addOldItemToHistory(VersionedRootItem versionedRootItem) {
@@ -28,15 +31,19 @@ public class UndoRedoRootItems {
 	}
 
 	public void undo() {
-		VersionedRootItem versionedRootItem = undoRootItems.pop();
-		redoRootItems.push(versionedRootItem);
-		undoAction(versionedRootItem);
+		if (!undoRootItems.empty()) {
+			VersionedRootItem versionedRootItem = undoRootItems.pop();
+			redoRootItems.push(versionedRootItem);
+			undoAction(versionedRootItem);
+		}
 	}
 
 	public void redo() {
-		VersionedRootItem versionedRootItem = redoRootItems.pop();
-		undoRootItems.push(versionedRootItem);
-		redoAction(versionedRootItem);
+		if (!redoRootItems.empty()) {
+			VersionedRootItem versionedRootItem = redoRootItems.pop();
+			undoRootItems.push(versionedRootItem);
+			redoAction(versionedRootItem);
+		}
 	}
 
 	private void redoAction(VersionedRootItem versionedRootItem) {
@@ -46,6 +53,7 @@ public class UndoRedoRootItems {
 
 			try {
 				rootItemPanelTableModel.insertItemToDatabase(versionedRootItem.getName(), versionedRootItem.getSellingPrice(), versionedRootItem.getBuyingPrice(), versionedRootItem.getAmount(), versionedRootItem.getCategory(), versionedRootItem.getNotes());
+				ItemsPanel_ItemsTable.scrollRectToVisible(ItemsPanel_ItemsTable.getCellRect(ItemsPanel_ItemsTable.getRowCount()-1, 0, true));
 			} catch (SQLException e) {
 				ErrorMessage.showErrorMessage(parent, e.getMessage());
 				e.printStackTrace();
@@ -56,7 +64,7 @@ public class UndoRedoRootItems {
 		case VersionedRootItem.UPDATED:
 
 			try {
-				rootItemPanelTableModel.deleteItem(versionedRootItem.getNewRootItemUpdatedValues(), UNKNOWN_ITEM_ROW_NUMBER);
+				rootItemPanelTableModel.updateItem(versionedRootItem.getNewRootItemUpdatedValues(), UNKNOWN_ITEM_ROW_NUMBER);
 			} catch (SQLException e) {
 				ErrorMessage.showErrorMessage(parent, e.getMessage());
 				e.printStackTrace();
@@ -108,7 +116,8 @@ public class UndoRedoRootItems {
 		case VersionedRootItem.DELETED:
 
 			try {
-				rootItemPanelTableModel.insertItemToDatabase(versionedRootItem.getName(), versionedRootItem.getSellingPrice(), versionedRootItem.getBuyingPrice(), versionedRootItem.getAmount(), versionedRootItem.getCategory(), versionedRootItem.getNotes());
+				rootItemPanelTableModel.insertItemToDatabaseWithSpecificValues(versionedRootItem.getName(), versionedRootItem.getSellingPrice(), versionedRootItem.getBuyingPrice(), versionedRootItem.getAmount(), versionedRootItem.getCategory(), versionedRootItem.getNotes(), versionedRootItem.getItemId(), versionedRootItem.getCreatedAt(), versionedRootItem.getUpdatedAt(), versionedRootItem.getAvailableCapital());
+				ItemsPanel_ItemsTable.scrollRectToVisible(ItemsPanel_ItemsTable.getCellRect(ItemsPanel_ItemsTable.getRowCount()-1, 0, true));
 			} catch (SQLException e) {
 				ErrorMessage.showErrorMessage(parent, e.getMessage());
 				e.printStackTrace();
