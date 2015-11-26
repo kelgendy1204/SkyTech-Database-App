@@ -310,7 +310,7 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
         TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(SellingPriceTextField);
 
         pack();
-    }// </editor-fold>     
+    }    
 	
 	private void updateItem(RootItem itemEdited, int itemRowNumber) {
 		
@@ -353,7 +353,10 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
 
 		try {
 			RootItem newRootItem = AddEditItemsDialog.this.rootItemPanelTableModel.updateItem(itemEdited, itemRowNumber);
-			versionedRootItem.initializeNewUpdatedDataItem(newRootItem.getSellingPrice(), newRootItem.getNotes(), newRootItem.getName(), newRootItem.getBuyingPrice(), newRootItem.getAmount(), newRootItem.getCategory(), newRootItem.getCreatedAt(), newRootItem.getUpdatedAt(), newRootItem.getAvailableCapital());
+			versionedRootItem.initializeNewUpdatedDataItem(newRootItem.getSellingPrice(), 
+					newRootItem.getNotes(), newRootItem.getName(), newRootItem.getBuyingPrice(), 
+					newRootItem.getAmount(), newRootItem.getCategory(), newRootItem.getCreatedAt(), 
+					newRootItem.getUpdatedAt(), newRootItem.getAvailableCapital());
 			undoRedoRootItems.addOldItemToHistory(versionedRootItem);
 			
 			AddEditItemsDialog.this.dispose();

@@ -14,13 +14,15 @@ public class ItemsPanel_ItemsTableMouseListener extends MouseAdapter {
 	private RootUserGUIFrame rootUserGUIFrame; 
 	private RootItemPanelTableModel rootItemPanelTableModel; 
 	private JTable ItemsPanel_ItemsTable;
+	private UndoRedoRootItems undoRedoRootItems;
 	
 	public ItemsPanel_ItemsTableMouseListener(RootUserGUIFrame rootUserGUIFrame, 
 			RootItemPanelTableModel rootItemPanelTableModel, 
-			JTable ItemsPanel_ItemsTable) {
+			JTable ItemsPanel_ItemsTable, UndoRedoRootItems undoRedoRootItems) {
 		this.ItemsPanel_ItemsTable = ItemsPanel_ItemsTable;
 		this.rootItemPanelTableModel = rootItemPanelTableModel;
 		this.rootUserGUIFrame = rootUserGUIFrame;
+		this.undoRedoRootItems = undoRedoRootItems;
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -31,7 +33,7 @@ public class ItemsPanel_ItemsTableMouseListener extends MouseAdapter {
 		if(e.getClickCount() >= 2){
 			int row = ItemsPanel_ItemsTable.rowAtPoint(e.getPoint());
 			RootItem item = rootItemPanelTableModel.items.get(row);
-			AddEditItemsDialog addEditItemsDialog = new AddEditItemsDialog(rootUserGUIFrame, "edit", item, row, rootItemPanelTableModel, ItemsPanel_ItemsTable);
+			AddEditItemsDialog addEditItemsDialog = new AddEditItemsDialog(rootUserGUIFrame, "edit", item, row, rootItemPanelTableModel, ItemsPanel_ItemsTable, undoRedoRootItems);
 	        Dimension dimension = rootUserGUIFrame.getSize();
 	        addEditItemsDialog.setLocation(dimension.width/2-addEditItemsDialog.getSize().width/2, dimension.height/2-addEditItemsDialog.getSize().height/2);
 	        addEditItemsDialog.setVisible(true);

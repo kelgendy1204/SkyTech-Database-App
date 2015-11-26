@@ -190,7 +190,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         ItemsPanel_ManualPanel.add(ItemsPanel_ManualPanel_UndoButton, gridBagConstraints);
 //        ItemsPanel_ManualPanel_UndoButton.setMnemonic(KeyEvent.VK_A);
         
@@ -204,7 +204,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         ItemsPanel_ManualPanel.add(ItemsPanel_ManualPanel_RedoItemButton, gridBagConstraints);
 //        ItemsPanel_ManualPanel_UndoButton.setMnemonic(KeyEvent.VK_A);
         
@@ -213,7 +213,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 5);
+        gridBagConstraints.insets = new java.awt.Insets(5, 25, 5, 5);
         ItemsPanel_ManualPanel.add(ItemsPanel_ManualPanel_CategoryLabel, gridBagConstraints);
         
         ItemsPanel_ManualPanel_CategoryComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {"all", "electric", "computer", "mobile" , "maintenance" , "other" }));
@@ -221,7 +221,6 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 50;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         ItemsPanel_ManualPanel.add(ItemsPanel_ManualPanel_CategoryComboBox, gridBagConstraints);
 
@@ -251,6 +250,8 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 15);
         ItemsPanel_ManualPanel.add(ItemsPanel_ManualPanel_CapitalTextField, gridBagConstraints);
         ItemsPanel_ManualPanel_CapitalTextField.setText(Double.toString(0));
+        TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(ItemsPanel_ManualPanel_CapitalTextField);
+        TextFieldAndComboBoxHandeler.setCenterAlignmentForTextField(ItemsPanel_ManualPanel_CapitalTextField);
         
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 10;
@@ -264,7 +265,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 80;
+        gridBagConstraints.ipadx = 50;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 5);
         ItemsPanel_ManualPanel.add(ItemsPanel_ManualPanel_AddItemButton, gridBagConstraints);
         ItemsPanel_ManualPanel_AddItemButton.setMnemonic(KeyEvent.VK_A);
@@ -274,7 +275,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.gridx = 15;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.ipadx = 40;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 5);
         ItemsPanel_ManualPanel.add(ItemsPanel_ManualPanel_AddToItemButton, gridBagConstraints);
         ItemsPanel_ManualPanel_AddToItemButton.setMnemonic(KeyEvent.VK_I);
@@ -316,9 +317,9 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
 				addAmountToRootItem();
 			}
 		});
-        ItemsPanel_ItemsTable.addMouseListener(new ItemsPanel_ItemsTableMouseListener(this, rootItemPanelTableModel, ItemsPanel_ItemsTable));
+        ItemsPanel_ItemsTable.addMouseListener(new ItemsPanel_ItemsTableMouseListener(this, rootItemPanelTableModel, ItemsPanel_ItemsTable, undoRedoRootItems));
         ItemsPanel_ItemsTable.getTableHeader().addMouseListener(rootItemSortByListener);
-        ItemsPanel_ItemsTable.addKeyListener(new ItemsPanel_ItemsTableKeyListener(this, rootItemPanelTableModel, ItemsPanel_ItemsTable));
+        ItemsPanel_ItemsTable.addKeyListener(new ItemsPanel_ItemsTableKeyListener(this, rootItemPanelTableModel, ItemsPanel_ItemsTable, undoRedoRootItems));
 ///////////////////////////////////////////////////////////////////////////////////////////////////       
         
         
@@ -476,7 +477,10 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         ProfitsPanel_ManualPanel.add(ProfitsPanel_ManualPanel_ProfitsTextFiled, gridBagConstraints);
-
+        TextFieldAndComboBoxHandeler.setCenterAlignmentForTextField(ProfitsPanel_ManualPanel_ProfitsTextFiled);
+        TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(ProfitsPanel_ManualPanel_ProfitsTextFiled);
+        
+        
         ProfitsPanel_ProfitsTablePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Date - Category", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         ProfitsPanel_ProfitsTable.setModel(profitsTableModel);
@@ -643,7 +647,9 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         OperationsPanel_ManualPanel.add(OperationsPanel_ManualPanel_IncomeTextField, gridBagConstraints);
-
+        TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(OperationsPanel_ManualPanel_IncomeTextField);
+        TextFieldAndComboBoxHandeler.setCenterAlignmentForTextField(OperationsPanel_ManualPanel_IncomeTextField);
+        
         OperationsPanel_OperationsTablePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Date - Category", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         OperationsPanel_OperationsTable.setModel(operationsTableModel);
