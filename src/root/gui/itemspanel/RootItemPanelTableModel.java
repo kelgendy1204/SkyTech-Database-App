@@ -186,6 +186,7 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 	}
 	
 	public RootItem updateItem(RootItem item, int itemRowNumber) throws SQLException {
+		
 		String sql = ("UPDATE skytech.items SET name = ?, selling_price = ?, buying_price = ?, amount = ? , category = ? , notes = ? WHERE item_id = ?" );
 		PreparedStatement updateStatement = database.getCon().prepareStatement(sql);
 		
@@ -210,6 +211,7 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		
 		if (itemRowNumber == UndoRedoRootItems.UNKNOWN_ITEM_ROW_NUMBER) {
 			itemUpdated = items.get(items.indexOf(item));
+			//will make problem
 		} else {
 			itemUpdated = items.get(itemRowNumber);			
 		}
