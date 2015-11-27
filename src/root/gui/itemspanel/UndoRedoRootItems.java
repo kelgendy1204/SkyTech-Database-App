@@ -52,7 +52,7 @@ public class UndoRedoRootItems {
 		case VersionedRootItem.INSERTED:
 
 			try {
-				rootItemPanelTableModel.insertItemToDatabase(versionedRootItem.getName(), versionedRootItem.getSellingPrice(), versionedRootItem.getBuyingPrice(), versionedRootItem.getAmount(), versionedRootItem.getCategory(), versionedRootItem.getNotes());
+				rootItemPanelTableModel.insertItemToDatabaseWithSpecificValues(versionedRootItem.getName(), versionedRootItem.getSellingPrice(), versionedRootItem.getBuyingPrice(), versionedRootItem.getAmount(), versionedRootItem.getCategory(), versionedRootItem.getNotes(), versionedRootItem.getItemId(), versionedRootItem.getCreatedAt(), versionedRootItem.getUpdatedAt(), versionedRootItem.getAvailableCapital());
 				ItemsPanel_ItemsTable.scrollRectToVisible(ItemsPanel_ItemsTable.getCellRect(ItemsPanel_ItemsTable.getRowCount()-1, 0, true));
 			} catch (SQLException e) {
 				ErrorMessage.showErrorMessage(parent, e.getMessage());
