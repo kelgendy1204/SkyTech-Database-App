@@ -14,6 +14,8 @@ import logic.NumbersHandling;
 import logic.TextFieldAndComboBoxHandeler;
 import root.gui.itemspanel.RootItem;
 import root.gui.itemspanel.RootItemPanelTableModel;
+import root.gui.itemspanel.UndoRedoRootItems;
+import root.gui.itemspanel.VersionedRootItem;
 
 public class AddToItemDialog extends javax.swing.JDialog {
 
@@ -25,19 +27,21 @@ public class AddToItemDialog extends javax.swing.JDialog {
 	private boolean isTotalCostAdded;
 	private int overallAmount;
 	private double newSellingPrice;
+	private UndoRedoRootItems undoRedoRootItems;
 	
 	public AddToItemDialog(java.awt.Frame parent, boolean modal) {
 		super(parent, modal);
 		initComponents();
 	}
 
-	public AddToItemDialog(java.awt.Frame parent,  RootItemPanelTableModel rootItemPanelTableModel, JTable ItemsPanel_ItemsTable) throws ArrayIndexOutOfBoundsException{
+	public AddToItemDialog(java.awt.Frame parent,  RootItemPanelTableModel rootItemPanelTableModel, JTable ItemsPanel_ItemsTable, UndoRedoRootItems undoRedoRootItems) throws ArrayIndexOutOfBoundsException{
 		super(parent, ModalityType.APPLICATION_MODAL);
 		initComponents();
 		
 		this.rootItemPanelTableModel = rootItemPanelTableModel;
 		this.ItemsPanel_ItemsTable = ItemsPanel_ItemsTable;
-
+		this.undoRedoRootItems = undoRedoRootItems;
+		
 		int itemRowNumber = this.ItemsPanel_ItemsTable.getSelectedRow();
 		RootItem itemEdited = this.rootItemPanelTableModel.items.get(itemRowNumber);		
 		addToItemTextField.setText(itemEdited.getName());
@@ -165,6 +169,9 @@ public class AddToItemDialog extends javax.swing.JDialog {
     } 
 	
 	private void updateItem(RootItem itemEdited, int itemRowNumber) {
+		VersionedRootItem versionedRootItem = (VersionedRootItem) itemEdited;
+		versionedRootItem.setType(VersionedRootItem.UPDATED);
+		
 		addToItemTextField.setText(itemEdited.getName());
 		
 		isAmountAdded = false;
@@ -192,7 +199,17 @@ public class AddToItemDialog extends javax.swing.JDialog {
 			itemEdited.setSellingPrice(newSellingPrice);
 			
 			try {
-				AddToItemDialog.this.rootItemPanelTableModel.updateItem(itemEdited, itemRowNumber);
+				RootItem newRootItem = AddToItemDialog.this.rootItemPanelTableModel
+						.updateItem(itemEdited, itemRowNumber);
+				
+				versionedRootItem.initializeNewUpdatedDataItem(newRootItem.getSellingPrice(), 
+						newRootItem.getNotes(), newRootItem.getName(), 
+						newRootItem.getBuyingPrice(), newRootItem.getAmount(), 
+						newRootItem.getCategory(), newRootItem.getCreatedAt(), 
+						newRootItem.getUpdatedAt(), newRootItem.getAvailableCapital());
+				
+				undoRedoRootItems.addOldItemToHistory(versionedRootItem);
+				
 				AddToItemDialog.this.dispose();
 			} catch (SQLException e1) {
 				ErrorMessage.showErrorMessage(this, e1.getMessage());

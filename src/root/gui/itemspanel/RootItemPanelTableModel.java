@@ -150,22 +150,43 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 	}
 	
 	public void deleteItem(RootItem item, int itemRowNumber) throws SQLException {
+		boolean changeCapitaltextField = true;
 		String sql = ("DELETE FROM skytech.items WHERE item_id = ?" );
+		
 		PreparedStatement preparedStatement = database.getCon().prepareStatement(sql);
 		preparedStatement.setInt(1, item.getItemId());
 		preparedStatement.executeUpdate();
-		double availableCapital = items.get(itemRowNumber).getAvailableCapital();
-		items.remove(itemRowNumber);
-		fireTableRowsDeleted(itemRowNumber, itemRowNumber);
+		double availableCapital = item.getAvailableCapital();		
+		
+		if (itemRowNumber == UndoRedoRootItems.UNKNOWN_ITEM_ROW_NUMBER) {
+			try {
+				changeCapitaltextField = items.remove(item);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			fireTableDataChanged();
+		} else {
+			items.remove(itemRowNumber);
+			fireTableRowsDeleted(itemRowNumber, itemRowNumber);
+		}
+		
 		preparedStatement.close();
 		
-		double totalCapitalBeforeDelete = Double.parseDouble(ItemsPanel_ManualPanel_CapitalTextField.getText());
-		double totalCapitalAfterDelete = Double.parseDouble(NumbersHandling.decimalFormat.format(totalCapitalBeforeDelete - availableCapital));
-		ItemsPanel_ManualPanel_CapitalTextField.setText(Double.toString(totalCapitalAfterDelete));
+		if (changeCapitaltextField) {
+			double totalCapitalBeforeDelete = Double
+					.parseDouble(ItemsPanel_ManualPanel_CapitalTextField
+							.getText());
+			double totalCapitalAfterDelete = Double
+					.parseDouble(NumbersHandling.decimalFormat
+							.format(totalCapitalBeforeDelete - availableCapital));
+			ItemsPanel_ManualPanel_CapitalTextField.setText(Double
+					.toString(totalCapitalAfterDelete));
+		}
 		
 	}
 	
-	public void updateItem(RootItem item, int itemRowNumber) throws SQLException {
+	public RootItem updateItem(RootItem item, int itemRowNumber) throws SQLException {
+		
 		String sql = ("UPDATE skytech.items SET name = ?, selling_price = ?, buying_price = ?, amount = ? , category = ? , notes = ? WHERE item_id = ?" );
 		PreparedStatement updateStatement = database.getCon().prepareStatement(sql);
 		
@@ -179,6 +200,10 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 
 		updateStatement.executeUpdate();
 		
+		if ((itemRowNumber == UndoRedoRootItems.UNKNOWN_ITEM_ROW_NUMBER) && (items.indexOf(item) == -1)) {
+			return null;
+		}
+		
 		PreparedStatement selectStatement = database.getCon().prepareStatement("SELECT name, selling_price, buying_price, amount, category, updated_at, available_capital, notes FROM skytech.items WHERE item_id = ?");
 		selectStatement.setInt(1, item.getItemId());
 		
@@ -186,7 +211,13 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		
 		results.next();
 
-		RootItem itemUpdated = items.get(itemRowNumber);
+		RootItem itemUpdated;
+		
+		if (itemRowNumber == UndoRedoRootItems.UNKNOWN_ITEM_ROW_NUMBER) {
+			itemUpdated = items.get(items.indexOf(item));
+		} else {
+			itemUpdated = items.get(itemRowNumber);			
+		}
 		
 		double oldAvailableCapital = itemUpdated.getAvailableCapital();
 		
@@ -208,7 +239,11 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		itemUpdated.setAvailableCapital(availableCapital);
 		itemUpdated.setNotes(notes);
 		
-		fireTableRowsUpdated(itemRowNumber, itemRowNumber);
+		if (itemRowNumber == UndoRedoRootItems.UNKNOWN_ITEM_ROW_NUMBER) {
+			fireTableDataChanged();
+		} else {
+			fireTableRowsUpdated(itemRowNumber, itemRowNumber);			
+		}
 		
 		results.close();
 		updateStatement.close();
@@ -218,9 +253,11 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		double totalCapitalAfterUpdate = Double.parseDouble(NumbersHandling.decimalFormat.format(totalCapitalBeforeUpdate - oldAvailableCapital + availableCapital));
 		ItemsPanel_ManualPanel_CapitalTextField.setText(Double.toString(totalCapitalAfterUpdate));
 		
+		return itemUpdated;
+		
 	}
 	
-	public void insertItemToDatabase(String name, double sellingPrice, double buyingPrice, int amount, Category category, String notes) throws SQLException{
+	public RootItem insertItemToDatabase(String name, double sellingPrice, double buyingPrice, int amount, Category category, String notes) throws SQLException{
 		String sql = "INSERT INTO skytech.items (name, selling_price, buying_price, amount, category, notes) VALUES (?, ?, ?, ?, ?, ?)";
 		PreparedStatement insertStatement = database.getCon().prepareStatement(sql);
 		insertStatement.setString(1, name);
@@ -240,7 +277,9 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		Timestamp updatedAt = results.getTimestamp("updated_at");
 		double availableCapital = results.getDouble("available_capital");
 		
-		items.add(new RootItem(itemId, name, buyingPrice, amount, category, sellingPrice, createdAt, updatedAt, availableCapital, notes));
+		RootItem rootItem = new RootItem(itemId, name, buyingPrice, amount, category, sellingPrice, createdAt, updatedAt, availableCapital, notes);
+		
+		items.add(rootItem);
 		
 		fireTableRowsInserted(items.size() - 1, items.size() - 1);
 		
@@ -251,6 +290,38 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		results.close();
 		selectInsertedStatement.close();
 		insertStatement.close();
+		
+		return rootItem;
+	}
+	
+	public RootItem insertItemToDatabaseWithSpecificValues(String name, double sellingPrice, double buyingPrice, int amount, Category category, String notes, int itemId, Timestamp createdAt, Timestamp updatedAt, double availableCapital) throws SQLException{
+		String sql = "INSERT INTO skytech.items (name, selling_price, buying_price, amount, category, notes, item_id, created_at, updated_at, available_capital) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		PreparedStatement insertStatement = database.getCon().prepareStatement(sql);
+		insertStatement.setString(1, name);
+		insertStatement.setDouble(2, sellingPrice);
+		insertStatement.setDouble(3, buyingPrice);
+		insertStatement.setInt(4, amount);
+		insertStatement.setString(5, category.toString());
+		insertStatement.setString(6, notes);
+		insertStatement.setInt(7, itemId);
+		insertStatement.setTimestamp(8, createdAt);
+		insertStatement.setTimestamp(9, updatedAt);
+		insertStatement.setDouble(10, availableCapital);
+		insertStatement.executeUpdate();
+
+		RootItem rootItem = new RootItem(itemId, name, buyingPrice, amount, category, sellingPrice, createdAt, updatedAt, availableCapital, notes);
+		
+		items.add(rootItem);
+		
+		fireTableRowsInserted(items.size() - 1, items.size() - 1);
+		
+		double totalCapitalBeforeInsert = Double.parseDouble(ItemsPanel_ManualPanel_CapitalTextField.getText());
+		double totalCapitalAfterInsert = Double.parseDouble(NumbersHandling.decimalFormat.format(totalCapitalBeforeInsert + availableCapital));
+		ItemsPanel_ManualPanel_CapitalTextField.setText(Double.toString(totalCapitalAfterInsert));
+		
+		insertStatement.close();
+		
+		return rootItem;
 	}
 
 	public void setLastSQL(String lastSQL) {

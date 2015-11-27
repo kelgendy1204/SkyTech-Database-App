@@ -22,6 +22,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -29,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -48,6 +51,7 @@ import root.gui.itemspanel.ItemsPanel_ItemsTableMouseListener;
 import root.gui.itemspanel.RootItemPanelTableModel;
 import root.gui.itemspanel.RootItemSortByListener;
 import root.gui.itemspanel.RootItemsPanel_ManualPanel_ViewButtonListener;
+import root.gui.itemspanel.UndoRedoRootItems;
 import root.gui.operations.OperationsPanel_ViewButtonListener;
 import root.gui.operations.OperationsTableKeyListener;
 import root.gui.operations.OperationsTableMouseListener;
@@ -90,6 +94,8 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         ItemsPanel_ManualPanel_CapitalTextField = new javax.swing.JTextField();
         ItemsPanel_ManualPanel_AddItemButton = new javax.swing.JButton();
         ItemsPanel_ManualPanel_AddToItemButton = new javax.swing.JButton();
+        ItemsPanel_ManualPanel_UndoButton = new javax.swing.JButton();
+        ItemsPanel_ManualPanel_RedoItemButton = new javax.swing.JButton();;
         jSeparator1 = new javax.swing.JSeparator();
         ItemsPanel_ItemsTablePanel = new javax.swing.JPanel();
         ScrollPane1 = new javax.swing.JScrollPane();
@@ -97,6 +103,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         rootItemPanelTableModel = new RootItemPanelTableModel(database, ItemsPanel_ManualPanel_CapitalTextField);
         rootItemsPanel_ManualPanel_ViewButtonListener = new RootItemsPanel_ManualPanel_ViewButtonListener(this, ItemsPanel_ItemsTablePanel, rootItemPanelTableModel, ItemsPanel_ManualPanel_CategoryComboBox);
         rootItemSortByListener = new RootItemSortByListener(this, rootItemPanelTableModel, ItemsPanel_ItemsTable);
+        undoRedoRootItems = new UndoRedoRootItems(this, rootItemPanelTableModel, ItemsPanel_ItemsTable);
         ProfitsPanel = new javax.swing.JPanel();
         ProfitsPanel_ManualPanel = new javax.swing.JPanel();
         ProfitsPanel_ManualPanel_DateOfOperationsLabel = new javax.swing.JLabel();
@@ -172,6 +179,50 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         jPanel4Layout.columnWidths = new int[] {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0};
         jPanel4Layout.rowHeights = new int[] {0, 5, 0};
         ItemsPanel_ManualPanel.setLayout(jPanel4Layout);
+        
+        ItemsPanel_ManualPanel_UndoButton.setText("Undo");
+        try {
+			ItemsPanel_ManualPanel_UndoButton.setIcon(getIcon("Undo16"));
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        ItemsPanel_ManualPanel.add(ItemsPanel_ManualPanel_UndoButton, gridBagConstraints);
+//        ItemsPanel_ManualPanel_UndoButton.setMnemonic(KeyEvent.VK_A);
+        
+        ItemsPanel_ManualPanel_RedoItemButton.setText("Redo");
+        try {
+			ItemsPanel_ManualPanel_RedoItemButton.setIcon(getIcon("Redo16"));
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        ItemsPanel_ManualPanel.add(ItemsPanel_ManualPanel_RedoItemButton, gridBagConstraints);
+//        ItemsPanel_ManualPanel_UndoButton.setMnemonic(KeyEvent.VK_A);
+        
+        ItemsPanel_ManualPanel_CategoryLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        ItemsPanel_ManualPanel_CategoryLabel.setText("Category :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 25, 5, 5);
+        ItemsPanel_ManualPanel.add(ItemsPanel_ManualPanel_CategoryLabel, gridBagConstraints);
+        
+        ItemsPanel_ManualPanel_CategoryComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {"all", "electric", "computer", "mobile" , "maintenance" , "other" }));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        ItemsPanel_ManualPanel.add(ItemsPanel_ManualPanel_CategoryComboBox, gridBagConstraints);
 
         ItemsPanel_ManualPanel_ViewButton.setText("View");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -181,23 +232,6 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 20;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 15);
         ItemsPanel_ManualPanel.add(ItemsPanel_ManualPanel_ViewButton, gridBagConstraints);
-
-        ItemsPanel_ManualPanel_CategoryComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] {"all", "electric", "computer", "mobile" , "maintenance" , "other" }));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 50;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        ItemsPanel_ManualPanel.add(ItemsPanel_ManualPanel_CategoryComboBox, gridBagConstraints);
-
-        ItemsPanel_ManualPanel_CategoryLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        ItemsPanel_ManualPanel_CategoryLabel.setText("Category :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 5);
-        ItemsPanel_ManualPanel.add(ItemsPanel_ManualPanel_CategoryLabel, gridBagConstraints);
 
         ItemsPanel_ManualPanel_CapitalLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         ItemsPanel_ManualPanel_CapitalLabel.setText("Avaliable capital :");
@@ -216,13 +250,22 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 15);
         ItemsPanel_ManualPanel.add(ItemsPanel_ManualPanel_CapitalTextField, gridBagConstraints);
         ItemsPanel_ManualPanel_CapitalTextField.setText(Double.toString(0));
+        TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(ItemsPanel_ManualPanel_CapitalTextField);
+        TextFieldAndComboBoxHandeler.setCenterAlignmentForTextField(ItemsPanel_ManualPanel_CapitalTextField);
+        
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 10;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 10;
+        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 15);
+        ItemsPanel_ManualPanel.add(jSeparator1, gridBagConstraints);
 
         ItemsPanel_ManualPanel_AddItemButton.setText("Add Item");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 12;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 80;
+        gridBagConstraints.ipadx = 50;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 5);
         ItemsPanel_ManualPanel.add(ItemsPanel_ManualPanel_AddItemButton, gridBagConstraints);
         ItemsPanel_ManualPanel_AddItemButton.setMnemonic(KeyEvent.VK_A);
@@ -232,16 +275,10 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.gridx = 15;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.ipadx = 50;
+        gridBagConstraints.ipadx = 40;
         gridBagConstraints.insets = new java.awt.Insets(5, 15, 5, 5);
         ItemsPanel_ManualPanel.add(ItemsPanel_ManualPanel_AddToItemButton, gridBagConstraints);
         ItemsPanel_ManualPanel_AddToItemButton.setMnemonic(KeyEvent.VK_I);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 10;
-        gridBagConstraints.insets = new java.awt.Insets(0, 15, 0, 15);
-        ItemsPanel_ManualPanel.add(jSeparator1, gridBagConstraints);
 
         ItemsPanel_ItemsTablePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Category", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
@@ -280,9 +317,11 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
 				addAmountToRootItem();
 			}
 		});
-        ItemsPanel_ItemsTable.addMouseListener(new ItemsPanel_ItemsTableMouseListener(this, rootItemPanelTableModel, ItemsPanel_ItemsTable));
+        ItemsPanel_ItemsTable.addMouseListener(new ItemsPanel_ItemsTableMouseListener(this, rootItemPanelTableModel, ItemsPanel_ItemsTable, undoRedoRootItems));
         ItemsPanel_ItemsTable.getTableHeader().addMouseListener(rootItemSortByListener);
-        ItemsPanel_ItemsTable.addKeyListener(new ItemsPanel_ItemsTableKeyListener(this, rootItemPanelTableModel, ItemsPanel_ItemsTable));
+        ItemsPanel_ItemsTable.addKeyListener(new ItemsPanel_ItemsTableKeyListener(this, rootItemPanelTableModel, ItemsPanel_ItemsTable, undoRedoRootItems));
+        ItemsPanel_ManualPanel_UndoButton.addActionListener( (event) -> undoRedoRootItems.undo());
+        ItemsPanel_ManualPanel_RedoItemButton.addActionListener( (event) -> undoRedoRootItems.redo());
 ///////////////////////////////////////////////////////////////////////////////////////////////////       
         
         
@@ -440,7 +479,10 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         ProfitsPanel_ManualPanel.add(ProfitsPanel_ManualPanel_ProfitsTextFiled, gridBagConstraints);
-
+        TextFieldAndComboBoxHandeler.setCenterAlignmentForTextField(ProfitsPanel_ManualPanel_ProfitsTextFiled);
+        TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(ProfitsPanel_ManualPanel_ProfitsTextFiled);
+        
+        
         ProfitsPanel_ProfitsTablePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Date - Category", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         ProfitsPanel_ProfitsTable.setModel(profitsTableModel);
@@ -607,7 +649,9 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 100;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         OperationsPanel_ManualPanel.add(OperationsPanel_ManualPanel_IncomeTextField, gridBagConstraints);
-
+        TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(OperationsPanel_ManualPanel_IncomeTextField);
+        TextFieldAndComboBoxHandeler.setCenterAlignmentForTextField(OperationsPanel_ManualPanel_IncomeTextField);
+        
         OperationsPanel_OperationsTablePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Date - Category", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         OperationsPanel_OperationsTable.setModel(operationsTableModel);
@@ -859,7 +903,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
     }
 
     private void addRootItem() {
-		AddEditItemsDialog addEditItemsDialog = new AddEditItemsDialog(RootUserGUIFrame.this, "add", null, 0, rootItemPanelTableModel, ItemsPanel_ItemsTable);
+		AddEditItemsDialog addEditItemsDialog = new AddEditItemsDialog(RootUserGUIFrame.this, "add", null, 0, rootItemPanelTableModel, ItemsPanel_ItemsTable, undoRedoRootItems);
         Dimension dimension = RootUserGUIFrame.this.getSize();
         addEditItemsDialog.setLocation(dimension.width/2-addEditItemsDialog.getSize().width/2, dimension.height/2-addEditItemsDialog.getSize().height/2);
         addEditItemsDialog.setVisible(true);
@@ -868,7 +912,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
     private void addAmountToRootItem() {
 		AddToItemDialog addToItemDialog;
 		try {
-			addToItemDialog = new AddToItemDialog(RootUserGUIFrame.this, rootItemPanelTableModel, ItemsPanel_ItemsTable);
+			addToItemDialog = new AddToItemDialog(RootUserGUIFrame.this, rootItemPanelTableModel, ItemsPanel_ItemsTable, undoRedoRootItems);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			ErrorMessage.showErrorMessage(RootUserGUIFrame.this, e.getMessage());
 			e.printStackTrace();
@@ -969,6 +1013,12 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
 	public RootItemPanelTableModel getRootItemPanelTableModel() {
 		return rootItemPanelTableModel;
 	}
+	
+	private ImageIcon getIcon(String iconName) {
+		URL url = getClass().getResource("/tempfiles/" + iconName + ".gif");
+		ImageIcon imageIcon = new ImageIcon(url);
+		return imageIcon;
+	}
     
     public static void main(String args[]) {
        
@@ -1013,6 +1063,7 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
         });
     }
 
+    private UndoRedoRootItems undoRedoRootItems;
     private BackUpAndRestore backUpAndRestore;
     private Database database;
     private javax.swing.JMenu FileMenu;
@@ -1030,6 +1081,8 @@ public class RootUserGUIFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<Category> ItemsPanel_ManualPanel_CategoryComboBox;
     private javax.swing.JLabel ItemsPanel_ManualPanel_CategoryLabel;
     private javax.swing.JButton ItemsPanel_ManualPanel_ViewButton;
+	private JButton ItemsPanel_ManualPanel_UndoButton;
+	private JButton ItemsPanel_ManualPanel_RedoItemButton;
     private RootItemPanelTableModel rootItemPanelTableModel;
     private RootItemsPanel_ManualPanel_ViewButtonListener rootItemsPanel_ManualPanel_ViewButtonListener;
     private javax.swing.JMenuBar MenuBar;
