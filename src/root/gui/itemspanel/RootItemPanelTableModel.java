@@ -150,6 +150,7 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 	}
 	
 	public void deleteItem(RootItem item, int itemRowNumber) throws SQLException {
+		boolean changeCapitaltextField = true;
 		String sql = ("DELETE FROM skytech.items WHERE item_id = ?" );
 		
 		PreparedStatement preparedStatement = database.getCon().prepareStatement(sql);
@@ -157,13 +158,9 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		preparedStatement.executeUpdate();
 		double availableCapital = item.getAvailableCapital();		
 		
-		//double availableCapital = items.get(itemRowNumber).getAvailableCapital();
-		
 		if (itemRowNumber == UndoRedoRootItems.UNKNOWN_ITEM_ROW_NUMBER) {
 			try {
-				items.remove(item);
-				//// implement array list contain method 
-				//// or implement equals and hashcode in rootitem
+				changeCapitaltextField = items.remove(item);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -174,9 +171,17 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		}
 		
 		preparedStatement.close();
-		double totalCapitalBeforeDelete = Double.parseDouble(ItemsPanel_ManualPanel_CapitalTextField.getText());
-		double totalCapitalAfterDelete = Double.parseDouble(NumbersHandling.decimalFormat.format(totalCapitalBeforeDelete - availableCapital));
-		ItemsPanel_ManualPanel_CapitalTextField.setText(Double.toString(totalCapitalAfterDelete));
+		
+		if (changeCapitaltextField) {
+			double totalCapitalBeforeDelete = Double
+					.parseDouble(ItemsPanel_ManualPanel_CapitalTextField
+							.getText());
+			double totalCapitalAfterDelete = Double
+					.parseDouble(NumbersHandling.decimalFormat
+							.format(totalCapitalBeforeDelete - availableCapital));
+			ItemsPanel_ManualPanel_CapitalTextField.setText(Double
+					.toString(totalCapitalAfterDelete));
+		}
 		
 	}
 	

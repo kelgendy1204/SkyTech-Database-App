@@ -1,8 +1,9 @@
 package root.gui.itemspanel;
 
+import global.Category;
+
 import java.sql.Timestamp;
 
-import global.Category;
 import normal.gui.itemspanel.Item;
 
 public class RootItem extends Item {
@@ -74,4 +75,18 @@ public class RootItem extends Item {
 		this.availableCapital = availableCapital;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) { return false; }
+		if (obj == this) { return true; }
+		if (!(obj instanceof RootItem)){ return false;}
+		
+		RootItem rootItem = (RootItem) obj;
+		
+		if(this.getName().equals(rootItem.getName()) && this.getItemId() == rootItem.getItemId() ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
