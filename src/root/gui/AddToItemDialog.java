@@ -199,8 +199,15 @@ public class AddToItemDialog extends javax.swing.JDialog {
 			itemEdited.setSellingPrice(newSellingPrice);
 			
 			try {
-				RootItem newRootItem = AddToItemDialog.this.rootItemPanelTableModel.updateItem(itemEdited, itemRowNumber);
-				versionedRootItem.initializeNewUpdatedDataItem(newRootItem.getSellingPrice(), newRootItem.getNotes(), newRootItem.getName(), newRootItem.getBuyingPrice(), newRootItem.getAmount(), newRootItem.getCategory(), newRootItem.getCreatedAt(), newRootItem.getUpdatedAt(), newRootItem.getAvailableCapital());
+				RootItem newRootItem = AddToItemDialog.this.rootItemPanelTableModel
+						.updateItem(itemEdited, itemRowNumber);
+				
+				versionedRootItem.initializeNewUpdatedDataItem(newRootItem.getSellingPrice(), 
+						newRootItem.getNotes(), newRootItem.getName(), 
+						newRootItem.getBuyingPrice(), newRootItem.getAmount(), 
+						newRootItem.getCategory(), newRootItem.getCreatedAt(), 
+						newRootItem.getUpdatedAt(), newRootItem.getAvailableCapital());
+				
 				undoRedoRootItems.addOldItemToHistory(versionedRootItem);
 				
 				AddToItemDialog.this.dispose();

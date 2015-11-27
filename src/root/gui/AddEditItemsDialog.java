@@ -351,11 +351,14 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
 		itemEdited.setCategory(category);
 
 		try {
-			RootItem newRootItem = AddEditItemsDialog.this.rootItemPanelTableModel.updateItem(itemEdited, itemRowNumber);
+			RootItem newRootItem = AddEditItemsDialog.this.rootItemPanelTableModel
+					.updateItem(itemEdited, itemRowNumber);
+			
 			versionedRootItem.initializeNewUpdatedDataItem(newRootItem.getSellingPrice(), 
 					newRootItem.getNotes(), newRootItem.getName(), newRootItem.getBuyingPrice(), 
 					newRootItem.getAmount(), newRootItem.getCategory(), newRootItem.getCreatedAt(), 
 					newRootItem.getUpdatedAt(), newRootItem.getAvailableCapital());
+			
 			undoRedoRootItems.addOldItemToHistory(versionedRootItem);
 			
 			AddEditItemsDialog.this.dispose();

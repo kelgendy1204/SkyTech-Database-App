@@ -200,6 +200,10 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 
 		updateStatement.executeUpdate();
 		
+		if ((itemRowNumber == UndoRedoRootItems.UNKNOWN_ITEM_ROW_NUMBER) && (items.indexOf(item) == -1)) {
+			return null;
+		}
+		
 		PreparedStatement selectStatement = database.getCon().prepareStatement("SELECT name, selling_price, buying_price, amount, category, updated_at, available_capital, notes FROM skytech.items WHERE item_id = ?");
 		selectStatement.setInt(1, item.getItemId());
 		
@@ -211,7 +215,6 @@ public class RootItemPanelTableModel extends AbstractTableModel {
 		
 		if (itemRowNumber == UndoRedoRootItems.UNKNOWN_ITEM_ROW_NUMBER) {
 			itemUpdated = items.get(items.indexOf(item));
-			//will make problem
 		} else {
 			itemUpdated = items.get(itemRowNumber);			
 		}
