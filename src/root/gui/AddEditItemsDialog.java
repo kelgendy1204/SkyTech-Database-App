@@ -52,6 +52,9 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
 
 		switch (addOrEdit) {
 		case "add":
+			
+			ItemTextField.requestFocus();
+			
 			UpdateButton.setVisible(false);
 			DeleteButton.setVisible(false);
 			InsertButton.setVisible(true);
@@ -80,6 +83,8 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
 			break;
 
 		default:
+			AmountTextField.requestFocus();
+			
 			UpdateButton.setVisible(true);
 			DeleteButton.setVisible(true);
 			InsertButton.setVisible(false);
@@ -310,6 +315,7 @@ public class AddEditItemsDialog extends javax.swing.JDialog {
         TextFieldAndComboBoxHandeler.selectAllAtTextFieldFocus(SellingPriceTextField);
 
         pack();
+        
     }    
 	
 	private void updateItem(RootItem itemEdited, int itemRowNumber) {
