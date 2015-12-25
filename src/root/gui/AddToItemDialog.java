@@ -94,7 +94,7 @@ public class AddToItemDialog extends javax.swing.JDialog {
         addedAmountLabel.setText("Amount added : ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         Panel2.add(addedAmountLabel, gridBagConstraints);
@@ -102,7 +102,7 @@ public class AddToItemDialog extends javax.swing.JDialog {
         addedAmountTextField.setColumns(10);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -111,7 +111,7 @@ public class AddToItemDialog extends javax.swing.JDialog {
         totalCostLabel.setText("Total Cost : ");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
         Panel2.add(totalCostLabel, gridBagConstraints);
@@ -119,7 +119,7 @@ public class AddToItemDialog extends javax.swing.JDialog {
         totalCostTextField.setColumns(10);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
@@ -169,8 +169,7 @@ public class AddToItemDialog extends javax.swing.JDialog {
     } 
 	
 	private void updateItem(RootItem itemEdited, int itemRowNumber) {
-		VersionedRootItem versionedRootItem = (VersionedRootItem) itemEdited;
-		versionedRootItem.setType(VersionedRootItem.UPDATED);
+		VersionedRootItem versionedRootItem = new VersionedRootItem(itemEdited, VersionedRootItem.UPDATED);
 		
 		addToItemTextField.setText(itemEdited.getName());
 		
